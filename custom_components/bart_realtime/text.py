@@ -43,7 +43,7 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
     @property
     def name(self):
         """Return the name of the text."""
-        return f"{self.base_entity_name()}_{self.train_name}"
+        return f"{self.get_base_entity_name()}_{self.train_name}"
 
     @property
     def train_name(self):
