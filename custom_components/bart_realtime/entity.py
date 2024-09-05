@@ -12,10 +12,10 @@ class BartRealtimeEntity(CoordinatorEntity):
         super().__init__(coordinator)
         self.config_entry = config_entry
 
-    # @property
-    # def unique_id(self):
-    #     """Return a unique ID to use for this entity."""
-    #     return self.config_entry.entry_id
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return self.config_entry.entry_id
 
     @property
     def device_info(self):
