@@ -6,12 +6,9 @@ import socket
 import aiohttp
 import async_timeout
 import xmltodict
-
-
 from homeassistant.helpers.json import json_dumps
 
 
-# from .const import XML_MIME_TYPES, DEFAULT_ENCODING, DEFAULT_BART_API_BASE_URL
 from .const import DEFAULT_BART_API_BASE_URL
 
 
