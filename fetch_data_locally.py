@@ -7,11 +7,12 @@ from custom_components.bart_realtime.api import BartRealtimeApiClient
 
 
 API_KEY = "api_key"
+STATION = "16TH"
 
 
 async def main():
     async with aiohttp.ClientSession() as client:
-        bart_api = BartRealtimeApiClient(API_KEY, client)
+        bart_api = BartRealtimeApiClient(API_KEY, STATION, client)
         # First do raw xml train times
         xml_train_times = await bart_api.async_get_xml_train_times()
         print('Raw xml train times incoming')

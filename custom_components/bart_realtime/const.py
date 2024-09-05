@@ -24,6 +24,7 @@ PLATFORMS = [BINARY_SENSOR, SENSOR]
 # Configuration and options
 CONF_ENABLED = "enabled"
 CONF_API_KEY = "api_key"
+CONF_STATION = "station"
 
 # Defaults
 DEFAULT_NAME = DOMAIN

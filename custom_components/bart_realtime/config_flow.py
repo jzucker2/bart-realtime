@@ -6,6 +6,7 @@ from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .api import BartRealtimeApiClient
 from .const import CONF_API_KEY
+from .const import CONF_STATION
 from .const import DOMAIN
 from .const import PLATFORMS
 
@@ -30,11 +31,12 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             valid = await self._test_credentials(
-                user_input[CONF_API_KEY]
+                user_input[CONF_API_KEY],
+                user_input[CONF_STATION]
             )
             if valid:
                 return self.async_create_entry(
-                    title=user_input[CONF_API_KEY], data=user_input
+                    title=user_input[CONF_STATION], data=user_input
                 )
             else:
                 self._errors["base"] = "auth"
@@ -51,20 +53,21 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def _show_config_form(self, user_input):  # pylint: disable=unused-argument
         """Show the configuration form to edit location data."""
         return self.async_show_form(
-            step_id="user",
+            step_id="station",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_API_KEY): str
+                    vol.Required(CONF_API_KEY): str,
+                    vol.Required(CONF_STATION): str
                 }
             ),
             errors=self._errors,
         )
 
-    async def _test_credentials(self, api_key):
+    async def _test_credentials(self, api_key, station):
         """Return true if credentials is valid."""
         try:
             session = async_create_clientsession(self.hass)
-            client = BartRealtimeApiClient(api_key, session)
+            client = BartRealtimeApiClient(api_key, station, session)
             await client.async_get_data()
             return True
         except Exception:  # pylint: disable=broad-except
@@ -91,7 +94,7 @@ class BartRealtimeOptionsFlowHandler(config_entries.OptionsFlow):
             return await self._update_options()
 
         return self.async_show_form(
-            step_id="user",
+            step_id="station",
             data_schema=vol.Schema(
                 {
                     vol.Required(x, default=self.options.get(x, True)): bool
