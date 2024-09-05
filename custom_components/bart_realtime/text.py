@@ -1,4 +1,4 @@
-"""Binary sensor platform for Bart Realtime."""
+"""Text sensor platform for Bart Realtime."""
 from homeassistant.components.text import TextEntity
 
 from .bart_trains import BartTrainLines
@@ -9,7 +9,7 @@ from .entity import BartRealtimeEntity
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
-    """Setup binary_sensor platform."""
+    """Setup text platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_devices(
         [
@@ -24,7 +24,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
 
 
 class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
-    """bart_realtime binary_sensor class."""
+    """bart_realtime text class."""
 
     def __init__(self, coordinator, config_entry, train_name):
         super().__init__(coordinator, config_entry)
@@ -32,7 +32,7 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
 
     @property
     def name(self):
-        """Return the name of the binary_sensor."""
+        """Return the name of the text."""
         return f"{DEFAULT_NAME}_{TEXT}_{self.train_name}"
 
     @property
