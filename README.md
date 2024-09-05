@@ -23,7 +23,6 @@ please look at the [User Guide in the Cookiecutter documentation](https://cookie
 | --------------- |-------------------------------------|
 | `binary_sensor` | Show something `True` or `False`.   |
 | `sensor`        | Show info from Bart Realtime API.   |
-| `switch`        | Switch something `True` or `False`. |
 
 ![example][exampleimg]
 
