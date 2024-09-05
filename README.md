@@ -19,11 +19,10 @@ please look at the [User Guide in the Cookiecutter documentation](https://cookie
 
 **This component will set up the following platforms.**
 
-| Platform        | Description                                                               |
-| --------------- | ------------------------------------------------------------------------- |
-| `binary_sensor` | Show something `True` or `False`.                                         |
+| Platform        | Description                       |
+| --------------- | --------------------------------- |
+| `binary_sensor` | Show something `True` or `False`. |
 | `sensor`        | Show info from Bart Realtime API. |
-| `switch`        | Switch something `True` or `False`.                                       |
 
 ![example][exampleimg]
 
@@ -94,3 +93,13 @@ Code template was mainly taken from [@Ludeeus](https://github.com/ludeeus)'s [in
 [releases-shield]: https://img.shields.io/github/release/jzucker2/bart-realtime.svg?style=for-the-badge
 [releases]: https://github.com/jzucker2/bart-realtime/releases
 [user_profile]: https://github.com/jzucker2
+
+## Local
+
+To run the local script:
+
+```
+pip install -r local-requirements.txt
+
+python local_data_fetcher.py
+```
