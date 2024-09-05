@@ -53,7 +53,7 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def _show_config_form(self, user_input):  # pylint: disable=unused-argument
         """Show the configuration form to edit location data."""
         return self.async_show_form(
-            step_id="station",
+            step_id="user",
             data_schema=vol.Schema(
                 {
                     vol.Required(CONF_API_KEY): str,
@@ -94,7 +94,7 @@ class BartRealtimeOptionsFlowHandler(config_entries.OptionsFlow):
             return await self._update_options()
 
         return self.async_show_form(
-            step_id="station",
+            step_id="user",
             data_schema=vol.Schema(
                 {
                     vol.Required(x, default=self.options.get(x, True)): bool
