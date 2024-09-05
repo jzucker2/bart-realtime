@@ -1,0 +1,10 @@
+{
+  "domain": "bart_realtime",
+  "name": "Bart Realtime",
+  "documentation": "https://github.com/jzucker2/bart-realtime",
+  "issue_tracker": "https://github.com/jzucker2/bart-realtime/issues",
+  "dependencies": [],
+  "config_flow": true,
+  "codeowners": ["@jzucker2"],
+  "requirements": []
+}
