@@ -28,11 +28,6 @@ class BartRealtimeApiClient:
         url = "https://jsonplaceholder.typicode.com/posts/1"
         return await self.api_wrapper("get", url)
 
-    async def async_set_title(self, value: str) -> None:
-        """Get data from the API."""
-        url = "https://jsonplaceholder.typicode.com/posts/1"
-        await self.api_wrapper("patch", url, data={"title": value}, headers=HEADERS)
-
     async def api_wrapper(
         self, method: str, url: str, data: dict = {}, headers: dict = {}
     ) -> dict:

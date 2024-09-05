@@ -23,13 +23,6 @@ async def test_api(hass, aioclient_mock, caplog):
     )
     assert await api.async_get_data() == {"test": "test"}
 
-    # We do the same for `async_set_title`. Note the difference in the mock call
-    # between the previous step and this one. We use `patch` here instead of `get`
-    # because we know that `async_set_title` calls `api_wrapper` with `patch` as the
-    # first parameter
-    aioclient_mock.patch("https://jsonplaceholder.typicode.com/posts/1")
-    assert await api.async_set_title("test") is None
-
     # In order to get 100% coverage, we need to test `api_wrapper` to test the code
     # that isn't already called by `async_get_data` and `async_set_title`. Because the
     # only logic that lives inside `api_wrapper` that is not being handled by a third
