@@ -49,4 +49,4 @@ class BartTrainLines(Enum):
     @classmethod
     def get_all_train_lines(cls):
         # could I also do `list(cls)`?
-        return list(BartTrainLines)
+        return list([b for b in cls])
