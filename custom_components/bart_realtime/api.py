@@ -5,32 +5,69 @@ import socket
 
 import aiohttp
 import async_timeout
+import xmltodict
+
+
+from homeassistant.helpers.json import json_dumps
+
+
+from .const import XML_MIME_TYPES, DEFAULT_ENCODING, DEFAULT_BART_API_BASE_URL
+
 
 TIMEOUT = 10
 
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
-HEADERS = {"Content-type": "application/json; charset=UTF-8"}
+# HEADERS = {"Content-type": "application/json; charset=UTF-8"}
+# TODO: double check this I think
+HEADERS = {"Content-type": "application/xml; charset=UTF-8"}
 
 
 class BartRealtimeApiClient:
     def __init__(
-        self, username: str, password: str, session: aiohttp.ClientSession
+        self, api_key: str, session: aiohttp.ClientSession
     ) -> None:
         """Sample API Client."""
-        self._username = username
-        self._passeword = password
+        self._api_key = api_key
         self._session = session
+
+    @property
+    def base_url(self):
+        return DEFAULT_BART_API_BASE_URL
 
     async def async_get_data(self) -> dict:
         """Get data from the API."""
-        return await self.async_get_train_times()
+        return await self.async_get_sanitized_train_times()
 
-    async def async_get_train_times(self) -> dict:
+    async def async_get_xml_train_times(self) -> dict:
         """Get data from the API."""
-        url = "https://jsonplaceholder.typicode.com/posts/1"
-        return await self.api_wrapper("get", url)
+        return await self.api_wrapper("get", self.base_url)
+
+    async def async_get_sanitized_train_times(self) -> dict:
+        """Get data from the API."""
+        xml_train_times = await self.async_get_xml_train_times()
+        _LOGGER.debug(
+            "Data fetched async xml_train_times: %s",
+            xml_train_times)
+        return self.data_without_xml(xml_train_times)
+
+    @classmethod
+    def data_without_xml(self, input_data) -> str | None:
+        """If the data is an XML string, convert it to a JSON string."""
+        _LOGGER.debug("Data fetched from resource: %s", input_data)
+        value = json_dumps(xmltodict.parse(input_data))
+        _LOGGER.debug("JSON converted from XML: %s", value)
+        # if (
+        #     (value := input_data) is not None
+        #     # If the http request failed, headers will be None
+        #     and (headers := self.headers) is not None
+        #     and (content_type := headers.get("content-type"))
+        #     and content_type.startswith(XML_MIME_TYPES)
+        # ):
+        #     value = json_dumps(xmltodict.parse(value))
+        #     _LOGGER.debug("JSON converted from XML: %s", value)
+        return value
 
     async def api_wrapper(
         self, method: str, url: str, data: dict = {}, headers: dict = {}
@@ -40,7 +77,7 @@ class BartRealtimeApiClient:
             async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):
                 if method == "get":
                     response = await self._session.get(url, headers=headers)
-                    return await response.json()
+                    return await response.text()
 
                 elif method == "put":
                     await self._session.put(url, headers=headers, json=data)

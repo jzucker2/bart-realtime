@@ -6,5 +6,5 @@
   "dependencies": [],
   "config_flow": true,
   "codeowners": ["@jzucker2"],
-  "requirements": []
+  "requirements": ["xmltodict==0.13.0"]
 }
