@@ -8,7 +8,6 @@ import async_timeout
 import xmltodict
 from homeassistant.helpers.json import json_dumps
 
-
 from .const import DEFAULT_BART_API_BASE_URL
 
 
