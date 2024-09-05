@@ -22,7 +22,7 @@ HEADERS = {"Content-type": "application/xml; charset=UTF-8"}
 
 class BartRealtimeApiClient:
     def __init__(
-        self, api_key: str, station:str, session: aiohttp.ClientSession
+        self, api_key: str, station: str, session: aiohttp.ClientSession
     ) -> None:
         """Sample API Client."""
         self._api_key = api_key

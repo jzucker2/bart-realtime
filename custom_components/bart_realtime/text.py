@@ -8,7 +8,6 @@ from .const import TEXT
 from .entity import BartRealtimeEntity
 
 
-
 async def async_setup_entry(hass, entry, async_add_devices):
     """Setup binary_sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
