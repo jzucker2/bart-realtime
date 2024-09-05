@@ -12,9 +12,18 @@ API_KEY = "api_key"
 async def main():
     async with aiohttp.ClientSession() as client:
         bart_api = BartRealtimeApiClient(API_KEY, client)
-        games = await bart_api.async_get_sanitized_train_times()
-        pprint.pprint(games)
-        print(len(games))
+        # First do raw xml train times
+        xml_train_times = await bart_api.async_get_xml_train_times()
+        print('Raw xml train times incoming')
+        pprint.pprint(xml_train_times)
+        print(f'Type of xml_train_times => {type(xml_train_times)}')
+        print(f'Length of xml_train_times => {len(xml_train_times)}')
+        # Now do sanitized train times
+        train_times = await bart_api.async_get_sanitized_train_times()
+        print('Sanitized train times incoming')
+        pprint.pprint(train_times)
+        print(f'Type of train_times => {type(train_times)}')
+        print(f'Length of train_times => {len(train_times)}')
 
 
 if __name__ == "__main__":

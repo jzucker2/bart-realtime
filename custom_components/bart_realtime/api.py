@@ -6,7 +6,6 @@ import socket
 import aiohttp
 import async_timeout
 import xmltodict
-from homeassistant.helpers.json import json_dumps
 
 from .const import DEFAULT_BART_API_BASE_URL
 
@@ -53,7 +52,7 @@ class BartRealtimeApiClient:
     def data_without_xml(self, input_data) -> str | None:
         """If the data is an XML string, convert it to a JSON string."""
         _LOGGER.debug("Data fetched from resource: %s", input_data)
-        value = json_dumps(xmltodict.parse(input_data))
+        value = xmltodict.parse(input_data)
         _LOGGER.debug("JSON converted from XML: %s", value)
         # if (
         #     (value := input_data) is not None
