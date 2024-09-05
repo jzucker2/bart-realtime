@@ -77,7 +77,7 @@ async def test_failed_config_flow(hass, error_on_get_data):
     )
 
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
-    assert result["step_id"] == "user"
+    assert result["step_id"] == "api_key"
 
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"], user_input=MOCK_CONFIG
@@ -101,7 +101,7 @@ async def test_options_flow(hass):
 
     # Verify that the first options step is a user form
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
-    assert result["step_id"] == "user"
+    assert result["step_id"] == "api_key"
 
     # Enter some fake data into the form
     result = await hass.config_entries.options.async_configure(
@@ -111,7 +111,7 @@ async def test_options_flow(hass):
 
     # Verify that the flow finishes
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    assert result["title"] == "test_username"
+    assert result["title"] == "test_api_key"
 
     # Verify that the options were updated
     assert entry.options == {BINARY_SENSOR: True, SENSOR: False, SWITCH: True}

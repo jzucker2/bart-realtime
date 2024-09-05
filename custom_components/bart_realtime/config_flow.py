@@ -29,9 +29,6 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
-            # valid = await self._test_credentials(
-            #     user_input[CONF_USERNAME], user_input[CONF_PASSWORD]
-            # )
             valid = await self._test_credentials(
                 user_input[CONF_API_KEY]
             )
