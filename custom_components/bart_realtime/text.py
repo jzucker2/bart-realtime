@@ -1,11 +1,12 @@
 """Binary sensor platform for Bart Realtime."""
 from homeassistant.components.text import TextEntity
 
-from .const import TEXT
+from .bart_trains import BartTrainLines
 from .const import DEFAULT_NAME
 from .const import DOMAIN
+from .const import TEXT
 from .entity import BartRealtimeEntity
-from .bart_trains import BartTrainLines
+
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
