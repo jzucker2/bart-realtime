@@ -15,6 +15,7 @@ class BartTrainLines(Enum):
     SFO_MILLBRAE = 'SFO/Millbrae'
     PITTSBURG_BAY_POINT = 'Pittsburg/Bay Point'
     BERRYESSA = 'Berryessa'
+    TWENTY_FOURTH_ST = '24th Street'
 
     @property
     def friendly_name(self):
@@ -40,6 +41,9 @@ class BartTrainLines(Enum):
             return 'PITT'
         elif self == self.BERRYESSA:
             return 'BERY'
+        elif self == self.TWENTY_FOURTH_ST:
+            # TODO: double check this one
+            return '24TH'
         raise BartTrainLinesException(f'unknown abbr for type self: {self}')
 
     @classmethod
