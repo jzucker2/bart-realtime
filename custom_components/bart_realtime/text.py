@@ -38,12 +38,17 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
 
     @classmethod
     def get_unique_entity_base_name(cls):
-        return cls.get_base_entity_name(separator='-')
+        return cls.get_base_entity_name(separator='_')
 
     @property
     def name(self):
         """Return the name of the text."""
         return f"{self.get_base_entity_name()}_{self.train_name}"
+
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return self.get_unique_entity_base_name()
 
     @property
     def train_name(self):
