@@ -25,6 +25,10 @@ class BartRealtimeApiClient:
 
     async def async_get_data(self) -> dict:
         """Get data from the API."""
+        return await self.async_get_train_times()
+
+    async def async_get_train_times(self) -> dict:
+        """Get data from the API."""
         url = "https://jsonplaceholder.typicode.com/posts/1"
         return await self.api_wrapper("get", url)
 
