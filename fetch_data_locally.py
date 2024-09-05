@@ -4,6 +4,7 @@ import pprint
 
 import aiohttp
 from custom_components.bart_realtime.api import BartRealtimeApiClient
+from custom_components.bart_realtime.bart_trains import BartTrainLines
 
 
 API_KEY = "api_key"
@@ -11,6 +12,8 @@ STATION = "16TH"
 
 
 async def main():
+    all_train_lines = BartTrainLines.get_all_train_lines()
+    print(f'Going with all_train_lines: {all_train_lines}')
     async with aiohttp.ClientSession() as client:
         bart_api = BartRealtimeApiClient(API_KEY, STATION, client)
         # First do raw xml train times
