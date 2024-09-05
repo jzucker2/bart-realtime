@@ -48,7 +48,7 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
     @property
     def unique_id(self) -> str:
         """Return a unique ID."""
-        return f"{self.get_unique_entity_base_name()}_{self.train_name}"
+        return f"{self.get_unique_entity_base_name()}_{self.sanitized_train_name}"
 
     @property
     def train_name(self):
