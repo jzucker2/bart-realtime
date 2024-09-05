@@ -21,11 +21,6 @@ class BartRealtimeSensor(BartRealtimeEntity):
         return f"{DEFAULT_NAME}_{SENSOR}"
 
     @property
-    def unique_id(self):
-        """Return a unique ID to use for this entity."""
-        return self.config_entry.entry_id
-
-    @property
     def state(self):
         """Return the state of the sensor."""
         return self.coordinator.data.get("body")
