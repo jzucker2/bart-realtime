@@ -32,5 +32,5 @@ class BartRealtimeSensor(BartRealtimeEntity):
 
     @property
     def device_class(self):
-        """Return de device class of the sensor."""
+        """Return the device class of the sensor."""
         return "bart_realtime__custom_device_class"
