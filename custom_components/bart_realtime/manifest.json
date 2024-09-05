@@ -1,12 +1,12 @@
 {
   "domain": "bart_realtime",
   "name": "Bart Realtime",
-  "documentation": "https://github.com/jzucker2/bart-realtime",
-  "issue_tracker": "https://github.com/jzucker2/bart-realtime/issues",
-  "dependencies": [],
-  "config_flow": true,
   "codeowners": ["@jzucker2"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/jzucker2/bart-realtime",
   "iot_class": "cloud_polling",
-  "version": "0.2.0",
-  "requirements": ["xmltodict==0.13.0"]
+  "issue_tracker": "https://github.com/jzucker2/bart-realtime/issues",
+  "requirements": ["xmltodict==0.13.0"],
+  "version": "0.2.0"
 }
