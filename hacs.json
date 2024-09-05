@@ -1,7 +1,7 @@
 {
   "name": "Bart Realtime",
   "hacs": "1.6.0",
-  "domains": ["binary_sensor", "sensor"],
+  "domains": ["binary_sensor", "sensor", "text"],
   "iot_class": "Cloud Polling",
   "homeassistant": "0.118.0"
 }

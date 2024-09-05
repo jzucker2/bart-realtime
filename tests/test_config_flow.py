@@ -15,7 +15,7 @@ from custom_components.bart_realtime.const import (
     SENSOR,
 )
 from custom_components.bart_realtime.const import (
-    SWITCH,
+    TEXT,
 )
 from homeassistant import config_entries
 from homeassistant import data_entry_flow
@@ -114,4 +114,4 @@ async def test_options_flow(hass):
     assert result["title"] == "test_api_key"
 
     # Verify that the options were updated
-    assert entry.options == {BINARY_SENSOR: True, SENSOR: False, SWITCH: True}
+    assert entry.options == {BINARY_SENSOR: True, SENSOR: False, TEXT: True}

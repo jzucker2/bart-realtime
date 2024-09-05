@@ -22,15 +22,24 @@ HEADERS = {"Content-type": "application/xml; charset=UTF-8"}
 
 class BartRealtimeApiClient:
     def __init__(
-        self, api_key: str, session: aiohttp.ClientSession
+        self, api_key: str, station: str, session: aiohttp.ClientSession
     ) -> None:
         """Sample API Client."""
         self._api_key = api_key
+        self._station = station
         self._session = session
 
     @property
     def base_url(self):
         return DEFAULT_BART_API_BASE_URL
+
+    @property
+    def api_key(self):
+        return self._api_key
+
+    @property
+    def station(self):
+        return self._station
 
     async def async_get_data(self) -> dict:
         """Get data from the API."""

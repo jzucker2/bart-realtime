@@ -18,6 +18,7 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from .api import BartRealtimeApiClient
 from .const import CONF_API_KEY
+from .const import CONF_STATION
 from .const import DOMAIN
 from .const import PLATFORMS
 from .const import STARTUP_MESSAGE
@@ -40,7 +41,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     session = async_get_clientsession(hass)
     api_key = entry.data.get(CONF_API_KEY)
-    client = BartRealtimeApiClient(api_key, session)
+    station = entry.data.get(CONF_STATION)
+    client = BartRealtimeApiClient(api_key, station, session)
 
     coordinator = BartRealtimeDataUpdateCoordinator(hass, client=client)
     await coordinator.async_refresh()

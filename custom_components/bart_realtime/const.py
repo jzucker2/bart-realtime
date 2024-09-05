@@ -3,7 +3,7 @@
 NAME = "Bart Realtime"
 DOMAIN = "bart_realtime"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 ISSUE_URL = "https://github.com/jzucker2/bart-realtime/issues"
@@ -17,13 +17,14 @@ BINARY_SENSOR_DEVICE_CLASS = "connectivity"
 # Platforms
 BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
-SWITCH = "switch"
-PLATFORMS = [BINARY_SENSOR, SENSOR]
+TEXT = "text"
+PLATFORMS = [BINARY_SENSOR, SENSOR, TEXT]
 
 
 # Configuration and options
 CONF_ENABLED = "enabled"
 CONF_API_KEY = "api_key"
+CONF_STATION = "station"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
