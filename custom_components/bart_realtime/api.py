@@ -43,7 +43,7 @@ class BartRealtimeApiClient:
 
     async def async_get_data(self) -> dict:
         """Get data from the API."""
-        return await self.async_get_sanitized_train_times()
+        return await self.async_get_transformed_train_times()
 
     async def async_get_xml_train_times(self) -> dict:
         """Get data from the API."""
