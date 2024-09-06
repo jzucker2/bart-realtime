@@ -54,7 +54,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data[DOMAIN][entry.entry_id] = coordinator
 
     coordinator.set_platforms(PLATFORMS)
-    # FIXME: need to replace with https://developers.home-assistant.io/blog/2022/07/08/config_entry_forwards/
     hass.async_add_job(
         hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     )
