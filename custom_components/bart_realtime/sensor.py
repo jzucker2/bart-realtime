@@ -23,7 +23,7 @@ class BartRealtimeSensor(BartRealtimeEntity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self.coordinator.data.get_is_connected()
+        return self.coordinator.get_sensor_state()
 
     @property
     def icon(self):

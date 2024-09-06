@@ -101,6 +101,13 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
         except AttributeError:
             return MISSING_VALUE
 
+    # TODO: make this actually better
+    def get_sensor_state(self):
+        try:
+            return self.data.response_time
+        except AttributeError:
+            return MISSING_VALUE
+
     def get_is_connected(self):
         try:
             return self.data.is_connected
