@@ -64,7 +64,6 @@ class BartRealtimeApiClient:
             input_data)
         final_data = {}
 
-        # estimates = input_data['root']['station']['etd']
         root_data = input_data['root']
         if not root_data:
             return {}
