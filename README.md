@@ -110,3 +110,4 @@ python local_data_fetcher.py
 - https://github.com/home-assistant/brands
 - https://github.com/home-assistant/brands/pull/2610
   - Example PR of adding images
+- https://developers.home-assistant.io/docs/config_entries_index/
