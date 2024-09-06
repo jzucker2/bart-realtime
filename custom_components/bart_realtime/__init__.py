@@ -20,6 +20,7 @@ from .api import BartRealtimeApiClient
 from .const import CONF_API_KEY
 from .const import CONF_STATION
 from .const import DOMAIN
+from .const import MISSING_VALUE
 from .const import PLATFORMS
 from .const import STARTUP_MESSAGE
 
@@ -89,10 +90,16 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
         return self.data.get(train_name)
 
     def get_current_minutes(self, train_name):
-        return self.get_current_train_data(train_name).get('current_minutes')
+        try:
+            return self.get_current_train_data(train_name).get('current_minutes')
+        except AttributeError:
+            return MISSING_VALUE
 
     def get_current_direction(self, train_name):
-        return self.get_current_train_data(train_name).get('current_direction')
+        try:
+            return self.get_current_train_data(train_name).get('current_direction')
+        except AttributeError:
+            return MISSING_VALUE
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
