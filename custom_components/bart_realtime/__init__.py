@@ -85,6 +85,15 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as exception:
             raise UpdateFailed() from exception
 
+    def get_current_train_data(self, train_name):
+        return self.data.get(train_name)
+
+    def get_current_minutes(self, train_name):
+        return self.get_current_train_data(train_name).get('current_minutes')
+
+    def get_current_direction(self, train_name):
+        return self.get_current_train_data(train_name).get('current_direction')
+
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Handle removal of an entry."""

@@ -61,4 +61,4 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
     @property
     def state(self):
         """Return value of the text if data exists."""
-        return self.coordinator.data.get(self.train_name, "missing")
+        return self.coordinator.get_current_minutes(self.train_name)
