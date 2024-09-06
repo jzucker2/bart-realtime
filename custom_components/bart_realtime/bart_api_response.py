@@ -127,3 +127,11 @@ class BartRootResponse:
 
     def get_current_train_direction(self, train_name):
         return self.get_current_train_data(train_name).latest_direction
+
+    @property
+    def is_connected(self):
+        if not self.response_date:
+            return False
+        if not self.response_time:
+            return False
+        return True
