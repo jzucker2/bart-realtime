@@ -9,6 +9,7 @@ from custom_components.bart_realtime.bart_trains import BartTrainLines
 
 API_KEY = "api_key"
 STATION = "16TH"
+TEST_TRAIN = 'Antioch'
 
 
 async def main():
@@ -33,7 +34,11 @@ async def main():
         print('Transformed train times incoming')
         pprint.pprint(tran_train_times)
         print(f'Type of tran_train_times => {type(tran_train_times)}')
-        print(f'Length of tran_train_times => {len(tran_train_times)}')
+        latest_minutes = tran_train_times.get_current_train_minutes(TEST_TRAIN)
+        latest_direction = tran_train_times.get_current_train_direction(TEST_TRAIN)
+        print(f'For TEST_TRAIN: {TEST_TRAIN} got '
+              f'latest_minutes: {latest_minutes} in '
+              f'latest_direction: {latest_direction}')
 
 
 if __name__ == "__main__":

@@ -87,17 +87,17 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
             raise UpdateFailed() from exception
 
     def get_current_train_data(self, train_name):
-        return self.data.get(train_name)
+        return self.data.get_current_train_data(train_name)
 
     def get_current_minutes(self, train_name):
         try:
-            return self.get_current_train_data(train_name).get('current_minutes')
+            return self.data.get_current_train_minutes(train_name)
         except AttributeError:
             return MISSING_VALUE
 
     def get_current_direction(self, train_name):
         try:
-            return self.get_current_train_data(train_name).get('current_direction')
+            return self.data.get_current_train_direction(train_name)
         except AttributeError:
             return MISSING_VALUE
 
