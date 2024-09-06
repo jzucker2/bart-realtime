@@ -2,8 +2,8 @@
 import asyncio
 import logging
 import socket
-from typing import Optional
 from dataclasses import dataclass
+from typing import Optional
 
 import aiohttp
 import async_timeout

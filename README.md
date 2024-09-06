@@ -106,7 +106,7 @@ python local_data_fetcher.py
 
 ## Notes
 
-* https://developers.home-assistant.io/blog/2020/05/08/logos-custom-integrations/
-  * https://github.com/home-assistant/brands
-  * https://github.com/home-assistant/brands/pull/2610
-    * Example PR of adding images
+- https://developers.home-assistant.io/blog/2020/05/08/logos-custom-integrations/
+- https://github.com/home-assistant/brands
+- https://github.com/home-assistant/brands/pull/2610
+  - Example PR of adding images
