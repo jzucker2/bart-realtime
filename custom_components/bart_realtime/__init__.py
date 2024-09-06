@@ -101,6 +101,12 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
         except AttributeError:
             return MISSING_VALUE
 
+    def get_is_connected(self):
+        try:
+            return self.data.is_connected
+        except AttributeError:
+            return False
+
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Handle removal of an entry."""
