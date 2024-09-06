@@ -29,6 +29,8 @@ CONF_STATION = "station"
 # Defaults
 DEFAULT_NAME = DOMAIN
 
+MISSING_VALUE = 'missing'
+
 
 STARTUP_MESSAGE = f"""
 -------------------------------------------------------------------
