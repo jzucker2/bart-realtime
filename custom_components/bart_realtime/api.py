@@ -7,6 +7,7 @@ import aiohttp
 import async_timeout
 import xmltodict
 
+from .bart_api_response import BartRootResponse
 from .const import DEFAULT_BART_API_BASE_URL
 
 
@@ -14,10 +15,6 @@ TIMEOUT = 10
 
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
-
-# HEADERS = {"Content-type": "application/json; charset=UTF-8"}
-# TODO: double check this I think
-HEADERS = {"Content-type": "application/xml; charset=UTF-8"}
 
 
 class BartRealtimeApiClient:
@@ -41,7 +38,7 @@ class BartRealtimeApiClient:
     def station(self):
         return self._station
 
-    async def async_get_data(self) -> dict:
+    async def async_get_data(self) -> BartRootResponse:
         """Get data from the API."""
         return await self.async_get_transformed_train_times()
 
@@ -58,34 +55,19 @@ class BartRealtimeApiClient:
         return self.data_without_xml(xml_train_times)
 
     @classmethod
-    def transform_train_times(cls, input_data) -> dict:
+    def transform_train_times(cls, input_data) -> BartRootResponse:
         _LOGGER.debug(
             "Transform train times input_data: %s",
             input_data)
-        final_data = {}
 
-        root_data = input_data['root']
-        if not root_data:
-            return {}
-        station_data = root_data['station']
-        train_lines_data = station_data['etd']
-        for train_line in train_lines_data:
-            _LOGGER.debug(
-                "Transform train times train_line: %s",
-                train_line)
-            train_line_key = train_line['destination']
-            # TODO: maybe make this safer
-            first_estimate = train_line['estimate'][0]
-            train_line['current_minutes'] = first_estimate['minutes']
-            train_line['current_direction'] = first_estimate['direction']
-            final_data[train_line_key] = train_line
+        bart_response = BartRootResponse.from_response(input_data)
 
         _LOGGER.debug(
-            "Transform train times final_data: %s",
-            final_data)
-        return dict(final_data)
+            "Transform train times bart_response: %s",
+            bart_response)
+        return bart_response
 
-    async def async_get_transformed_train_times(self) -> dict:
+    async def async_get_transformed_train_times(self) -> BartRootResponse:
         """Get data from the API."""
         san_train_times = await self.async_get_sanitized_train_times()
         _LOGGER.debug(
@@ -99,15 +81,6 @@ class BartRealtimeApiClient:
         _LOGGER.debug("Data fetched from resource: %s", input_data)
         value = xmltodict.parse(input_data)
         _LOGGER.debug("JSON converted from XML: %s", value)
-        # if (
-        #     (value := input_data) is not None
-        #     # If the http request failed, headers will be None
-        #     and (headers := self.headers) is not None
-        #     and (content_type := headers.get("content-type"))
-        #     and content_type.startswith(XML_MIME_TYPES)
-        # ):
-        #     value = json_dumps(xmltodict.parse(value))
-        #     _LOGGER.debug("JSON converted from XML: %s", value)
         return value
 
     async def api_wrapper(

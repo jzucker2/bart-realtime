@@ -50,3 +50,12 @@ class BartTrainLines(Enum):
     def get_all_train_lines(cls):
         # could I also do `list(cls)`?
         return list([b for b in cls])
+
+
+class BartTrainLineDirections(Enum):
+    NORTH = 'North'
+    SOUTH = 'South'
+
+    @property
+    def friendly_name(self):
+        return self.value
