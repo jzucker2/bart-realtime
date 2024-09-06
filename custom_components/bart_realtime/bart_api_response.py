@@ -90,7 +90,7 @@ class BartRootResponse:
 
         root_data = input_data['root']
         if not root_data:
-            # TODO: raise exception instead
+            # TODO: make sure I properly handle this exception
             raise BartRootResponseException('no root data')
 
         root_date = root_data['date']
