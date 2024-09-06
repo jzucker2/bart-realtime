@@ -53,13 +53,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     hass.data[DOMAIN][entry.entry_id] = coordinator
 
-    for platform in PLATFORMS:
-        if entry.options.get(platform, True):
-            coordinator.platforms.append(platform)
-            # FIXME: need to replace with https://developers.home-assistant.io/blog/2022/07/08/config_entry_forwards/
-            hass.async_add_job(
-                hass.config_entries.async_forward_entry_setup(entry, platform)
-            )
+    coordinator.set_platforms(PLATFORMS)
+    hass.async_add_job(
+        hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    )
 
     entry.add_update_listener(async_reload_entry)
     return True
@@ -78,6 +75,9 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
         self.platforms = []
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
+
+    def set_platforms(self, configured_platforms):
+        self.platforms = configured_platforms
 
     async def _async_update_data(self):
         """Update data via library."""
