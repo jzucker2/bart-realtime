@@ -23,11 +23,17 @@ async def main():
         print(f'Type of xml_train_times => {type(xml_train_times)}')
         print(f'Length of xml_train_times => {len(xml_train_times)}')
         # Now do sanitized train times
-        train_times = await bart_api.async_get_sanitized_train_times()
+        san_train_times = await bart_api.async_get_sanitized_train_times()
         print('Sanitized train times incoming')
-        pprint.pprint(train_times)
-        print(f'Type of train_times => {type(train_times)}')
-        print(f'Length of train_times => {len(train_times)}')
+        pprint.pprint(san_train_times)
+        print(f'Type of san_train_times => {type(san_train_times)}')
+        print(f'Length of san_train_times => {len(san_train_times)}')
+        # Now do transformed train times
+        tran_train_times = await bart_api.async_get_transformed_train_times()
+        print('Transformed train times incoming')
+        pprint.pprint(tran_train_times)
+        print(f'Type of tran_train_times => {type(tran_train_times)}')
+        print(f'Length of tran_train_times => {len(tran_train_times)}')
 
 
 if __name__ == "__main__":

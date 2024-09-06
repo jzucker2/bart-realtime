@@ -58,6 +58,43 @@ class BartRealtimeApiClient:
         return self.data_without_xml(xml_train_times)
 
     @classmethod
+    def transform_train_times(cls, input_data) -> dict:
+        _LOGGER.debug(
+            "Transform train times input_data: %s",
+            input_data)
+        final_data = {}
+
+        # estimates = input_data['root']['station']['etd']
+        root_data = input_data['root']
+        if not root_data:
+            return {}
+        station_data = root_data['station']
+        train_lines_data = station_data['etd']
+        for train_line in train_lines_data:
+            _LOGGER.debug(
+                "Transform train times train_line: %s",
+                train_line)
+            train_line_key = train_line['destination']
+            # TODO: maybe make this safer
+            first_estimate = train_line['estimate'][0]
+            train_line['current_minutes'] = first_estimate['minutes']
+            train_line['current_direction'] = first_estimate['direction']
+            final_data[train_line_key] = train_line
+
+        _LOGGER.debug(
+            "Transform train times final_data: %s",
+            final_data)
+        return dict(final_data)
+
+    async def async_get_transformed_train_times(self) -> dict:
+        """Get data from the API."""
+        san_train_times = await self.async_get_sanitized_train_times()
+        _LOGGER.debug(
+            "Data fetched async san_train_times: %s",
+            san_train_times)
+        return self.transform_train_times(san_train_times)
+
+    @classmethod
     def data_without_xml(self, input_data) -> str | None:
         """If the data is an XML string, convert it to a JSON string."""
         _LOGGER.debug("Data fetched from resource: %s", input_data)
