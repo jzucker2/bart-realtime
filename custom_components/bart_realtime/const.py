@@ -42,17 +42,6 @@ If you have any issues with this you need to open an issue here:
 -------------------------------------------------------------------
 """
 
-# I added this
-
-XML_MIME_TYPES = (
-    "application/rss+xml",
-    "application/xhtml+xml",
-    "application/xml",
-    "text/xml",
-)
-
-DEFAULT_ENCODING = "UTF-8"
-
 DEFAULT_BART_STATION = "16TH"
 
 # https://api.bart.gov/docs/etd/etd.aspx
