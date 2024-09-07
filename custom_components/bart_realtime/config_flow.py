@@ -31,8 +31,7 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             valid = await self._test_credentials(
-                user_input[CONF_API_KEY],
-                user_input[CONF_STATION]
+                user_input[CONF_API_KEY], user_input[CONF_STATION]
             )
             if valid:
                 return self.async_create_entry(
@@ -55,10 +54,7 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
-                {
-                    vol.Required(CONF_API_KEY): str,
-                    vol.Required(CONF_STATION): str
-                }
+                {vol.Required(CONF_API_KEY): str, vol.Required(CONF_STATION): str}
             ),
             errors=self._errors,
         )
