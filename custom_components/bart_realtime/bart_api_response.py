@@ -53,7 +53,9 @@ class TrainLineResponse:
     @classmethod
     def from_response(cls, input_data):
         all_estimates = input_data["estimate"]
-        final_estimates = [TrainEstimateResponse.from_response(e) for e in all_estimates]
+        final_estimates = [
+            TrainEstimateResponse.from_response(e) for e in all_estimates
+        ]
         return cls(
             abbreviation=input_data["abbreviation"],
             destination=input_data["destination"],
@@ -105,7 +107,7 @@ class BartRootResponse:
 
         train_lines_data = station_data["etd"]
         for train_line in train_lines_data:
-            _LOGGER.debug("Transform train times train_line: %s",train_line)
+            _LOGGER.debug("Build response train times train_line: %s", train_line)
             train_line_key = train_line["destination"]
             train_line_response = TrainLineResponse.from_response(train_line)
             final_train_lines_data[train_line_key] = train_line_response
