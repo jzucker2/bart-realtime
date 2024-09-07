@@ -5,7 +5,6 @@ import socket
 
 import aiohttp
 import async_timeout
-import xmltodict
 
 from .bart_api_response import BartRootResponse
 from .const import DEFAULT_BART_API_BASE_URL
@@ -42,17 +41,9 @@ class BartRealtimeApiClient:
         """Get data from the API."""
         return await self.async_get_transformed_train_times()
 
-    async def async_get_xml_train_times(self) -> dict:
+    async def async_get_json_train_times(self) -> dict:
         """Get data from the API."""
         return await self.api_wrapper("get", self.base_url)
-
-    async def async_get_sanitized_train_times(self) -> dict:
-        """Get data from the API."""
-        xml_train_times = await self.async_get_xml_train_times()
-        _LOGGER.debug(
-            "Data fetched async xml_train_times: %s",
-            xml_train_times)
-        return self.data_without_xml(xml_train_times)
 
     @classmethod
     def transform_train_times(cls, input_data) -> BartRootResponse:
@@ -69,19 +60,11 @@ class BartRealtimeApiClient:
 
     async def async_get_transformed_train_times(self) -> BartRootResponse:
         """Get data from the API."""
-        san_train_times = await self.async_get_sanitized_train_times()
+        json_train_times = await self.async_get_json_train_times()
         _LOGGER.debug(
-            "Data fetched async san_train_times: %s",
-            san_train_times)
-        return self.transform_train_times(san_train_times)
-
-    @classmethod
-    def data_without_xml(self, input_data) -> str | None:
-        """If the data is an XML string, convert it to a JSON string."""
-        _LOGGER.debug("Data fetched from resource: %s", input_data)
-        value = xmltodict.parse(input_data)
-        _LOGGER.debug("JSON converted from XML: %s", value)
-        return value
+            "Data fetched for transform async json_train_times: %s",
+            json_train_times)
+        return self.transform_train_times(json_train_times)
 
     async def api_wrapper(
         self, method: str, url: str, data: dict = {}, headers: dict = {}
@@ -91,7 +74,7 @@ class BartRealtimeApiClient:
             async with async_timeout.timeout(TIMEOUT):
                 if method == "get":
                     response = await self._session.get(url, headers=headers)
-                    return await response.text()
+                    return await response.json()
 
                 elif method == "put":
                     await self._session.put(url, headers=headers, json=data)

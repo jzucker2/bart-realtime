@@ -3,7 +3,7 @@
 NAME = "Bart Realtime"
 DOMAIN = "bart_realtime"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 ISSUE_URL = "https://github.com/jzucker2/bart-realtime/issues"
@@ -42,19 +42,8 @@ If you have any issues with this you need to open an issue here:
 -------------------------------------------------------------------
 """
 
-# I added this
-
-XML_MIME_TYPES = (
-    "application/rss+xml",
-    "application/xhtml+xml",
-    "application/xml",
-    "text/xml",
-)
-
-DEFAULT_ENCODING = "UTF-8"
-
 DEFAULT_BART_STATION = "16TH"
 
 # https://api.bart.gov/docs/etd/etd.aspx
 # https://api.bart.gov/api/etd.aspx?cmd=etd&orig=16TH&key=MW9S-E7SL-26DU-VV8V
-DEFAULT_BART_API_BASE_URL = 'https://api.bart.gov/api/etd.aspx?cmd=etd&orig=16TH&key=MW9S-E7SL-26DU-VV8V'
+DEFAULT_BART_API_BASE_URL = 'https://api.bart.gov/api/etd.aspx?cmd=etd&orig=16TH&key=MW9S-E7SL-26DU-VV8V&json=y'
