@@ -111,6 +111,7 @@ python local_data_fetcher.py
 - https://github.com/home-assistant/brands/pull/2610
   - Example PR of adding images
 - https://developers.home-assistant.io/docs/config_entries_index/
+- https://github.com/boralyl/github-custom-component-tutorial
 
 ## Example
 
