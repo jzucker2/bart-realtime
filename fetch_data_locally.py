@@ -4,9 +4,9 @@ import pprint
 import sys
 
 import aiohttp
+
 from custom_components.bart_realtime.api import BartRealtimeApiClient
 from custom_components.bart_realtime.bart_trains import BartTrainLines
-
 
 API_KEY = "api_key"
 STATION = "16TH"

@@ -3,17 +3,16 @@
 import asyncio
 
 import aiohttp
-from custom_components.bart_realtime.api import (
-    BartRealtimeApiClient,
-)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
+from custom_components.bart_realtime.api import BartRealtimeApiClient
 
 
 async def test_api(hass, aioclient_mock, caplog):
     """Test API calls."""
 
     # To test the api submodule, we first create an instance of our API client
-    api = BartRealtimeApiClient("test", async_get_clientsession(hass))
+    api = BartRealtimeApiClient("test", "16TH", async_get_clientsession(hass))
 
     # Use aioclient_mock which is provided by `pytest_homeassistant_custom_components`
     # to mock responses to aiohttp requests. In this case we are telling the mock to
