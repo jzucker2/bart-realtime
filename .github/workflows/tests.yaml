@@ -44,7 +44,7 @@ jobs:
     name: HACS
     steps:
       - name: HACS Action
-        uses: "hacs/action@master"
+        uses: "hacs/action@main"
         with:
           category: "integration"
           ignore: brands
