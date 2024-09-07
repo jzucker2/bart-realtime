@@ -96,10 +96,10 @@ Code template was mainly taken from [@Ludeeus](https://github.com/ludeeus)'s [in
 
 ## Local
 
-To run the local script:
+To run the dev script locally:
 
 ```
-pip install -r local-requirements.txt
+pip install -r dev-requirements.txt
 
 python local_data_fetcher.py
 ```
