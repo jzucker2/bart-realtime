@@ -10,7 +10,7 @@ from custom_components.bart_realtime.bart_trains import BartTrainLines
 
 API_KEY = "api_key"
 STATION = "16TH"
-TEST_TRAIN = 'Antioch'
+TEST_TRAIN = "Antioch"
 
 
 # https://stackoverflow.com/questions/73884117/how-to-replace-asyncio-get-event-loop-to-avoid-the-deprecationwarning
@@ -29,7 +29,7 @@ def get_current_event_loop():
 
 async def main():
     all_train_lines = BartTrainLines.get_all_train_lines()
-    print(f'Going with all_train_lines: {all_train_lines}')
+    print(f"Going with all_train_lines: {all_train_lines}")
     async with aiohttp.ClientSession() as client:
         bart_api = BartRealtimeApiClient(API_KEY, STATION, client)
         # First do raw xml train times
