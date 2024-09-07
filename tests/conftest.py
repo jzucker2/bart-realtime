@@ -1,4 +1,5 @@
 """Global fixtures for Bart Realtime integration."""
+
 from unittest.mock import patch
 
 import pytest

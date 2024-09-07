@@ -1,4 +1,5 @@
 """Text sensor platform for Bart Realtime."""
+
 from homeassistant.components.text import TextEntity
 
 from .bart_trains import BartTrainLines
@@ -13,11 +14,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
     coordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_devices(
         [
-            BartRealtimeTextSensor(
-                coordinator,
-                entry,
-                s.friendly_name
-            )
+            BartRealtimeTextSensor(coordinator, entry, s.friendly_name)
             for s in BartTrainLines.get_all_train_lines()
         ]
     )
@@ -32,13 +29,13 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
         self._attr_unique_id = f"{self.get_unique_entity_base_name()}-{train_name}"
 
     @classmethod
-    def get_base_entity_name(self, separator='_'):
+    def get_base_entity_name(self, separator="_"):
         """Return the base entity of the text."""
         return f"{DEFAULT_NAME}{separator}{TEXT}"
 
     @classmethod
     def get_unique_entity_base_name(cls):
-        return cls.get_base_entity_name(separator='_')
+        return cls.get_base_entity_name(separator="_")
 
     @property
     def name(self):
@@ -56,7 +53,7 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
 
     @property
     def sanitized_train_name(self):
-        return self.train_name.replace(' /', '_').lower()
+        return self.train_name.replace(" /", "_").lower()
 
     @property
     def state(self):

@@ -1,4 +1,5 @@
 """Constants for Bart Realtime tests."""
+
 from custom_components.bart_realtime.const import CONF_API_KEY
 from custom_components.bart_realtime.const import CONF_STATION
 

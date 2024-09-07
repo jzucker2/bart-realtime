@@ -6,16 +6,16 @@ class BartTrainLinesException(Exception):
 
 
 class BartTrainLines(Enum):
-    ANTIOCH = 'Antioch'
-    DALY_CITY = 'Daly City'
-    DUBLIN_PLEASANTON = 'Dublin/Pleasanton'
-    MILLBRAE = 'Millbrae'
-    RICHMOND = 'Richmond'
-    SF_AIRPORT = 'SF Airport'
-    SFO_MILLBRAE = 'SFO/Millbrae'
-    PITTSBURG_BAY_POINT = 'Pittsburg/Bay Point'
-    BERRYESSA = 'Berryessa'
-    TWENTY_FOURTH_ST = '24th Street'
+    ANTIOCH = "Antioch"
+    DALY_CITY = "Daly City"
+    DUBLIN_PLEASANTON = "Dublin/Pleasanton"
+    MILLBRAE = "Millbrae"
+    RICHMOND = "Richmond"
+    SF_AIRPORT = "SF Airport"
+    SFO_MILLBRAE = "SFO/Millbrae"
+    PITTSBURG_BAY_POINT = "Pittsburg/Bay Point"
+    BERRYESSA = "Berryessa"
+    TWENTY_FOURTH_ST = "24th Street"
 
     @property
     def friendly_name(self):
@@ -24,27 +24,27 @@ class BartTrainLines(Enum):
     @property
     def abbreviation(self):
         if self == self.ANTIOCH:
-            return 'ANTC'
+            return "ANTC"
         elif self == self.DALY_CITY:
-            return 'DALY'
+            return "DALY"
         elif self == self.DUBLIN_PLEASANTON:
-            return 'DUBL'
+            return "DUBL"
         elif self == self.MILLBRAE:
-            return 'MLBR'
+            return "MLBR"
         elif self == self.RICHMOND:
-            return 'RICH'
+            return "RICH"
         elif self == self.SF_AIRPORT:
-            return 'SFIA'
+            return "SFIA"
         elif self == self.SFO_MILLBRAE:
-            return 'MLBR'
+            return "MLBR"
         elif self == self.PITTSBURG_BAY_POINT:
-            return 'PITT'
+            return "PITT"
         elif self == self.BERRYESSA:
-            return 'BERY'
+            return "BERY"
         elif self == self.TWENTY_FOURTH_ST:
             # TODO: double check this one
-            return '24TH'
-        raise BartTrainLinesException(f'unknown abbr for type self: {self}')
+            return "24TH"
+        raise BartTrainLinesException(f"unknown abbr for type self: {self}")
 
     @classmethod
     def get_all_train_lines(cls):
@@ -53,8 +53,8 @@ class BartTrainLines(Enum):
 
 
 class BartTrainLineDirections(Enum):
-    NORTH = 'North'
-    SOUTH = 'South'
+    NORTH = "North"
+    SOUTH = "South"
 
     @property
     def friendly_name(self):

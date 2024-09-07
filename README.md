@@ -96,10 +96,10 @@ Code template was mainly taken from [@Ludeeus](https://github.com/ludeeus)'s [in
 
 ## Local
 
-To run the local script:
+To run the dev script locally:
 
 ```
-pip install -r local-requirements.txt
+pip install -r dev-requirements.txt
 
 python local_data_fetcher.py
 ```
@@ -111,6 +111,7 @@ python local_data_fetcher.py
 - https://github.com/home-assistant/brands/pull/2610
   - Example PR of adding images
 - https://developers.home-assistant.io/docs/config_entries_index/
+- https://github.com/boralyl/github-custom-component-tutorial
 
 ## Example
 
