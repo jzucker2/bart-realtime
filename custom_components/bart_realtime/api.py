@@ -46,6 +46,10 @@ class BartRealtimeApiClient:
         """Get data from the API."""
         return await self.api_wrapper("get", self.base_url)
 
+    async def async_get_json_train_times(self) -> dict:
+        """Get data from the API."""
+        return await self.api_wrapper("get", self.base_url)
+
     async def async_get_sanitized_train_times(self) -> dict:
         """Get data from the API."""
         xml_train_times = await self.async_get_xml_train_times()
@@ -69,11 +73,11 @@ class BartRealtimeApiClient:
 
     async def async_get_transformed_train_times(self) -> BartRootResponse:
         """Get data from the API."""
-        san_train_times = await self.async_get_sanitized_train_times()
+        json_train_times = await self.async_get_json_train_times()
         _LOGGER.debug(
-            "Data fetched async san_train_times: %s",
-            san_train_times)
-        return self.transform_train_times(san_train_times)
+            "Data fetched for transform async json_train_times: %s",
+            json_train_times)
+        return self.transform_train_times(json_train_times)
 
     @classmethod
     def data_without_xml(self, input_data) -> str | None:
@@ -91,7 +95,7 @@ class BartRealtimeApiClient:
             async with async_timeout.timeout(TIMEOUT):
                 if method == "get":
                     response = await self._session.get(url, headers=headers)
-                    return await response.text()
+                    return await response.json()
 
                 elif method == "put":
                     await self._session.put(url, headers=headers, json=data)

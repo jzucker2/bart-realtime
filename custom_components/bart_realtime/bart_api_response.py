@@ -97,7 +97,9 @@ class BartRootResponse:
         root_message = root_data['message']
         root_time = root_data['time']
 
-        station_data = root_data['station']
+        station_list = root_data['station']
+        # assume always station in list!
+        station_data = station_list[0]
         station_abbreviation = station_data['abbr']
         station_name = station_data['name']
 
