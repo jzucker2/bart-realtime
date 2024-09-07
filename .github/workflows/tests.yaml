@@ -43,11 +43,8 @@ jobs:
     runs-on: "ubuntu-latest"
     name: HACS
     steps:
-      - name: Check out the repository
-        uses: "actions/checkout@v2.3.4"
-
-      - name: HACS validation
-        uses: "hacs/action@20.12.0"
+      - name: HACS Action
+        uses: "hacs/action@22.5.0"
         with:
           category: "integration"
           ignore: brands
