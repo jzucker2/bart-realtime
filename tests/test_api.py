@@ -4,10 +4,13 @@ import asyncio
 
 import aiohttp
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+import pytest
+import pytest_asyncio  # noqa: F401
 
 from custom_components.bart_realtime.api import BartRealtimeApiClient
 
 
+@pytest.mark.asyncio
 async def test_api(hass, aioclient_mock, caplog):
     """Test API calls."""
 
