@@ -71,7 +71,9 @@ jobs:
           python-version: ${{ env.DEFAULT_PYTHON }}
           cache: 'pip'
       - name: Install requirements
+        # I don't love the way this handles constraints
         run: |
+          pip install --constraint=.github/workflows/constraints.txt pip
           pip install -r requirements_test.txt
       - name: Tests suite
         run: |
