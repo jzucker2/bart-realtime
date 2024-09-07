@@ -98,7 +98,7 @@ class BartRootResponse:
         root_time = root_data['time']
 
         station_list = root_data['station']
-        # assume always station in list!
+        # assume always 1 station in list!
         station_data = station_list[0]
         station_abbreviation = station_data['abbr']
         station_name = station_data['name']
