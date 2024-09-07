@@ -1,4 +1,5 @@
 """Test Bart Realtime setup process."""
+
 import pytest
 from custom_components.bart_realtime import (
     async_reload_entry,

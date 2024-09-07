@@ -1,4 +1,5 @@
 """Constants for Bart Realtime."""
+
 # Base component constants
 NAME = "Bart Realtime"
 DOMAIN = "bart_realtime"

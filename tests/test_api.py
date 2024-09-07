@@ -1,4 +1,5 @@
 """Tests for Bart Realtime api."""
+
 import asyncio
 
 import aiohttp

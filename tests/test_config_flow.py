@@ -1,4 +1,5 @@
 """Test Bart Realtime config flow."""
+
 from unittest.mock import patch
 
 import pytest

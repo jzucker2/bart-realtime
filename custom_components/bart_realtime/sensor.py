@@ -1,4 +1,5 @@
 """Sensor platform for Bart Realtime."""
+
 from .const import DEFAULT_NAME
 from .const import DOMAIN
 from .const import ICON

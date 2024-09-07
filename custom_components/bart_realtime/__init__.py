@@ -4,6 +4,7 @@ Custom integration to integrate Bart Realtime with Home Assistant.
 For more details about this integration, please refer to
 https://github.com/jzucker2/bart-realtime
 """
+
 import asyncio
 import logging
 from datetime import timedelta

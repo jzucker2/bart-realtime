@@ -1,4 +1,5 @@
 """Text sensor platform for Bart Realtime."""
+
 from homeassistant.components.text import TextEntity
 
 from .bart_trains import BartTrainLines
