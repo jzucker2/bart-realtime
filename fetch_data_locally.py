@@ -34,20 +34,20 @@ async def main():
         bart_api = BartRealtimeApiClient(API_KEY, STATION, client)
         # First do raw xml train times
         json_train_times = await bart_api.async_get_json_train_times()
-        print('Raw json train times incoming')
+        print("Raw json train times incoming")
         pprint.pprint(json_train_times)
-        print(f'Type of json_train_times => {type(json_train_times)}')
-        print(f'Length of json_train_times => {len(json_train_times)}')
+        print(f"Type of json_train_times => {type(json_train_times)}")
+        print(f"Length of json_train_times => {len(json_train_times)}")
         # Now do transformed train times
         tran_train_times = await bart_api.async_get_transformed_train_times()
-        print('Transformed train times incoming')
+        print("Transformed train times incoming")
         pprint.pprint(tran_train_times)
-        print(f'Type of tran_train_times => {type(tran_train_times)}')
+        print(f"Type of tran_train_times => {type(tran_train_times)}")
         latest_minutes = tran_train_times.get_current_train_minutes(TEST_TRAIN)
         latest_direction = tran_train_times.get_current_train_direction(TEST_TRAIN)
-        print(f'For TEST_TRAIN: {TEST_TRAIN} got '
-              f'latest_minutes: {latest_minutes} in '
-              f'latest_direction: {latest_direction}')
+        print(f"For TEST_TRAIN: {TEST_TRAIN} got "
+              f"latest_minutes: {latest_minutes} in "
+              f"latest_direction: {latest_direction}")
 
 
 if __name__ == "__main__":

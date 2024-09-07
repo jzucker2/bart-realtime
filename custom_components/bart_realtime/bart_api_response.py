@@ -30,16 +30,16 @@ class TrainEstimateResponse:
     @classmethod
     def from_response(cls, input_data):
         return cls(
-            bikeflag=input_data['bikeflag'],
-            cancelflag=input_data['cancelflag'],
-            color=input_data['color'],
-            delay=input_data['delay'],
-            direction=input_data['direction'],
-            dynamicflag=input_data['dynamicflag'],
-            hexcolor=input_data['hexcolor'],
-            length=input_data['length'],
-            minutes=input_data['minutes'],
-            platform=input_data['platform'],
+            bikeflag=input_data["bikeflag"],
+            cancelflag=input_data["cancelflag"],
+            color=input_data["color"],
+            delay=input_data["delay"],
+            direction=input_data["direction"],
+            dynamicflag=input_data["dynamicflag"],
+            hexcolor=input_data["hexcolor"],
+            length=input_data["length"],
+            minutes=input_data["minutes"],
+            platform=input_data["platform"],
         )
 
 
@@ -52,12 +52,12 @@ class TrainLineResponse:
 
     @classmethod
     def from_response(cls, input_data):
-        all_estimates = input_data['estimate']
+        all_estimates = input_data["estimate"]
         final_estimates = [TrainEstimateResponse.from_response(e) for e in all_estimates]
         return cls(
-            abbreviation=input_data['abbreviation'],
-            destination=input_data['destination'],
-            limited=input_data['limited'],
+            abbreviation=input_data["abbreviation"],
+            destination=input_data["destination"],
+            limited=input_data["limited"],
             estimates=final_estimates,
         )
 
@@ -88,27 +88,25 @@ class BartRootResponse:
     def from_response(cls, input_data):
         final_train_lines_data = {}
 
-        root_data = input_data['root']
+        root_data = input_data["root"]
         if not root_data:
             # TODO: make sure I properly handle this exception
-            raise BartRootResponseException('no root data')
+            raise BartRootResponseException("no root data")
 
-        root_date = root_data['date']
-        root_message = root_data['message']
-        root_time = root_data['time']
+        root_date = root_data["date"]
+        root_message = root_data["message"]
+        root_time = root_data["time"]
 
-        station_list = root_data['station']
+        station_list = root_data["station"]
         # assume always 1 station in list!
         station_data = station_list[0]
-        station_abbreviation = station_data['abbr']
-        station_name = station_data['name']
+        station_abbreviation = station_data["abbr"]
+        station_name = station_data["name"]
 
-        train_lines_data = station_data['etd']
+        train_lines_data = station_data["etd"]
         for train_line in train_lines_data:
-            _LOGGER.debug(
-                "Transform train times train_line: %s",
-                train_line)
-            train_line_key = train_line['destination']
+            _LOGGER.debug("Transform train times train_line: %s",train_line)
+            train_line_key = train_line["destination"]
             train_line_response = TrainLineResponse.from_response(train_line)
             final_train_lines_data[train_line_key] = train_line_response
 
