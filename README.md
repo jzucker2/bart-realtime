@@ -112,6 +112,8 @@ python local_data_fetcher.py
   - Example PR of adding images
 - https://developers.home-assistant.io/docs/config_entries_index/
 - https://github.com/boralyl/github-custom-component-tutorial
+- https://github.com/project-koku/nise-populator/pull/135#issuecomment-2329879613
+  - black and reorder-python-imports are now incompatible
 
 ## Example
 
