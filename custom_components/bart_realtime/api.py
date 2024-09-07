@@ -10,7 +10,6 @@ import async_timeout
 from .bart_api_response import BartRootResponse
 from .const import DEFAULT_BART_API_BASE_URL
 
-
 TIMEOUT = 10
 
 

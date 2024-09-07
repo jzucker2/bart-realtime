@@ -3,10 +3,9 @@
 import asyncio
 
 import aiohttp
-from custom_components.bart_realtime.api import (
-    BartRealtimeApiClient,
-)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
+from custom_components.bart_realtime.api import BartRealtimeApiClient
 
 
 async def test_api(hass, aioclient_mock, caplog):

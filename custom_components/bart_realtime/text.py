@@ -3,9 +3,7 @@
 from homeassistant.components.text import TextEntity
 
 from .bart_trains import BartTrainLines
-from .const import DEFAULT_NAME
-from .const import DOMAIN
-from .const import TEXT
+from .const import DEFAULT_NAME, DOMAIN, TEXT
 from .entity import BartRealtimeEntity
 
 

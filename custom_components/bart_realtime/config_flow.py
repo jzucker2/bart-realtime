@@ -1,15 +1,12 @@
 """Adds config flow for Bart Realtime."""
 
-import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+import voluptuous as vol
 
 from .api import BartRealtimeApiClient
-from .const import CONF_API_KEY
-from .const import CONF_STATION
-from .const import DOMAIN
-from .const import PLATFORMS
+from .const import CONF_API_KEY, CONF_STATION, DOMAIN, PLATFORMS
 
 
 class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):

@@ -1,7 +1,6 @@
-import logging
 from dataclasses import dataclass
+import logging
 from typing import Optional
-
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
