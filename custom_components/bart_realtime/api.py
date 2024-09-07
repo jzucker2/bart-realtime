@@ -57,7 +57,9 @@ class BartRealtimeApiClient:
     async def async_get_transformed_train_times(self) -> BartRootResponse:
         """Get data from the API."""
         json_train_times = await self.async_get_json_train_times()
-        _LOGGER.debug("Data fetched for transform async json_train_times: %s", json_train_times)
+        _LOGGER.debug(
+            "Data fetched for transform async json_train_times: %s", json_train_times
+        )
         return self.transform_train_times(json_train_times)
 
     async def api_wrapper(
