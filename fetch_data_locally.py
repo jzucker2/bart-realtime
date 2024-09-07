@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import asyncio
 import pprint
+import sys
 
 import aiohttp
 from custom_components.bart_realtime.api import BartRealtimeApiClient
@@ -10,6 +11,20 @@ from custom_components.bart_realtime.bart_trains import BartTrainLines
 API_KEY = "api_key"
 STATION = "16TH"
 TEST_TRAIN = 'Antioch'
+
+
+# https://stackoverflow.com/questions/73884117/how-to-replace-asyncio-get-event-loop-to-avoid-the-deprecationwarning
+def get_current_event_loop():
+    if sys.version_info < (3, 10):
+        loop = asyncio.get_event_loop()
+    else:
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+
+        asyncio.set_event_loop(loop)
+    return loop
 
 
 async def main():
@@ -36,5 +51,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
+    loop = get_current_event_loop()
     loop.run_until_complete(main())
