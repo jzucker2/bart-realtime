@@ -44,9 +44,7 @@ If you have any issues with this you need to open an issue here:
 """
 
 DEFAULT_BART_STATION = "16TH"
+DEFAULT_API_KEY = "MW9S-E7SL-26DU-VV8V"
 
 # https://api.bart.gov/docs/etd/etd.aspx
 # https://api.bart.gov/api/etd.aspx?cmd=etd&orig=16TH&key=MW9S-E7SL-26DU-VV8V
-DEFAULT_BART_API_BASE_URL = (
-    "https://api.bart.gov/api/etd.aspx?cmd=etd&orig=16TH&key=MW9S-E7SL-26DU-VV8V&json=y"
-)
