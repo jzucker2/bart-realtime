@@ -79,6 +79,14 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
     def set_platforms(self, configured_platforms):
         self.platforms = configured_platforms
 
+    @property
+    def bart_station(self):
+        return self.api.station
+
+    @property
+    def safe_bart_station(self):
+        return self.bart_station.lower()
+
     async def _async_update_data(self):
         """Update data via library."""
         try:
