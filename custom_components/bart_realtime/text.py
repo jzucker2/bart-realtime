@@ -24,7 +24,7 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
     def __init__(self, coordinator, config_entry, train_name):
         super().__init__(coordinator, config_entry)
         self._train_name = train_name
-        self._attr_unique_id = f"{self.get_unique_entity_base_name()}-{train_name}"
+        self._attr_unique_id = f"{self.get_unique_entity_base_name()}-{coordinator.safe_bart_station}-{train_name}"
 
     @classmethod
     def get_base_entity_name(self, separator="_"):
@@ -43,7 +43,7 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
     @property
     def unique_id(self) -> str:
         """Return a unique ID."""
-        return f"{self.get_unique_entity_base_name()}_{self.sanitized_train_name}"
+        return f"{self.get_unique_entity_base_name()}_{self.safe_bart_station}_{self.sanitized_train_name}"
 
     @property
     def train_name(self):

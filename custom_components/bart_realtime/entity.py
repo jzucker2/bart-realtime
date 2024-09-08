@@ -20,6 +20,10 @@ class BartRealtimeEntity(CoordinatorEntity):
         return self.config_entry_id
 
     @property
+    def safe_bart_station(self):
+        return self.coordinator.safe_bart_station
+
+    @property
     def device_info(self):
         return {
             "identifiers": {(DOMAIN, self.config_entry_id)},
