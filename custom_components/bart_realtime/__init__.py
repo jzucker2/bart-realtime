@@ -55,6 +55,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data[DOMAIN][entry.entry_id] = coordinator
 
     coordinator.set_platforms(PLATFORMS)
+    # https://developers.home-assistant.io/blog/2024/03/13/deprecate_add_run_job
     hass.async_add_job(hass.config_entries.async_forward_entry_setups(entry, PLATFORMS))
 
     entry.add_update_listener(async_reload_entry)

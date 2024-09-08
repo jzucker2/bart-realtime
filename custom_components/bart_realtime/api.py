@@ -8,7 +8,7 @@ import aiohttp
 import async_timeout
 
 from .bart_api_response import BartRootResponse
-from .const import DEFAULT_BART_API_BASE_URL
+from .const import DEFAULT_API_KEY
 
 TIMEOUT = 10
 
@@ -24,10 +24,18 @@ class BartRealtimeApiClient:
         self._api_key = api_key
         self._station = station
         self._session = session
+        # TODO: start supplying or allowing an api_key
+        self._base_url = self.build_base_url(station)
+
+    @classmethod
+    def build_base_url(cls, station_abbr, api_key=DEFAULT_API_KEY):
+        base_url = f"https://api.bart.gov/api/etd.aspx?cmd=etd&orig={station_abbr}&key={api_key}&json=y"
+        _LOGGER.debug("bart api client building base_url: %s", base_url)
+        return base_url
 
     @property
     def base_url(self):
-        return DEFAULT_BART_API_BASE_URL
+        return self._base_url
 
     @property
     def api_key(self):
