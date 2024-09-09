@@ -116,6 +116,7 @@ python local_data_fetcher.py
   - black and reorder-python-imports are now incompatible
 - https://developers.home-assistant.io/blog/2024/04/30/store-runtime-data-inside-config-entry/
 - https://developers.home-assistant.io/blog/2024/08/05/coordinator_async_setup/
+- https://developers.home-assistant.io/blog/2024/05/01/improved-hass-data-typing
 
 ## Bart Dev Info
 
