@@ -1,5 +1,7 @@
 """Adds config flow for Bart Realtime."""
 
+import logging
+
 from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
@@ -7,6 +9,26 @@ import voluptuous as vol
 
 from .api import BartRealtimeApiClient
 from .const import CONF_API_KEY, CONF_STATION, DOMAIN, PLATFORMS
+
+_LOGGER: logging.Logger = logging.getLogger(__package__)
+
+# This is the schema that used to display the UI to the user. This simple
+# schema has a single required host field, but it could include a number of fields
+# such as username, password etc. See other components in the HA core code for
+# further examples.
+# Note the input displayed to the user will be translated. See the
+# translations/<lang>.json file and strings.json. See here for further information:
+# https://developers.home-assistant.io/docs/config_entries_config_flow_handler/#translations
+# At the time of writing I found the translations created by the scaffold didn't
+# quite work as documented and always gave me the "Lokalise key references" string
+# (in square brackets), rather than the actual translated value. I did not attempt to
+# figure this out or look further into it.
+DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_API_KEY): str,
+        vol.Required(CONF_STATION): str,
+    }
+)
 
 
 class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -28,9 +50,7 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         #     return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
-            valid = await self._test_credentials(
-                user_input[CONF_API_KEY], user_input[CONF_STATION]
-            )
+            valid = await self._test_credentials(user_input)
             if valid:
                 return self.async_create_entry(
                     title=user_input[CONF_STATION], data=user_input
@@ -51,18 +71,19 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Show the configuration form to edit location data."""
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema(
-                {vol.Required(CONF_API_KEY): str, vol.Required(CONF_STATION): str}
-            ),
+            data_schema=DATA_SCHEMA,
             errors=self._errors,
         )
 
-    async def _test_credentials(self, api_key, station):
+    async def _test_credentials(self, user_input):
         """Return true if credentials is valid."""
         try:
+            _LOGGER.debug("Test credentials user_input: %s", user_input)
             session = async_create_clientsession(self.hass)
+            api_key = user_input[CONF_API_KEY]
+            station = user_input[CONF_STATION]
             client = BartRealtimeApiClient(api_key, station, session)
-            await client.async_get_data()
+            await client.async_validate()
             return True
         except Exception:  # pylint: disable=broad-except
             pass

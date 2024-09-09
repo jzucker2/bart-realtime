@@ -76,7 +76,7 @@ class TrainLineResponse:
 
 
 @dataclass(frozen=True, kw_only=True)
-class BartRootResponse:
+class BartETDRootResponse:
     # TODO: need to turn into a datetime object
     response_date: str
     response_time: str

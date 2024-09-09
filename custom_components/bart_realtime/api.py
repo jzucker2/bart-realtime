@@ -7,7 +7,7 @@ import socket
 import aiohttp
 import async_timeout
 
-from .bart_api_response import BartRootResponse
+from .bart_api_response import BartETDRootResponse
 from .const import DEFAULT_API_KEY
 
 TIMEOUT = 10
@@ -45,7 +45,12 @@ class BartRealtimeApiClient:
     def station(self):
         return self._station
 
-    async def async_get_data(self) -> BartRootResponse:
+    async def async_validate(self) -> BartETDRootResponse:
+        """Validate by getting data from the API."""
+        # TODO: add a check for station in all stations and maybe even call station detail
+        return await self.async_get_data()
+
+    async def async_get_data(self) -> BartETDRootResponse:
         """Get data from the API."""
         return await self.async_get_transformed_train_times()
 
@@ -54,15 +59,15 @@ class BartRealtimeApiClient:
         return await self.api_wrapper("get", self.base_url)
 
     @classmethod
-    def transform_train_times(cls, input_data) -> BartRootResponse:
+    def transform_train_times(cls, input_data) -> BartETDRootResponse:
         _LOGGER.debug("Transform train times input_data: %s", input_data)
 
-        bart_response = BartRootResponse.from_response(input_data)
+        bart_response = BartETDRootResponse.from_response(input_data)
 
         _LOGGER.debug("Transform train times bart_response: %s", bart_response)
         return bart_response
 
-    async def async_get_transformed_train_times(self) -> BartRootResponse:
+    async def async_get_transformed_train_times(self) -> BartETDRootResponse:
         """Get data from the API."""
         json_train_times = await self.async_get_json_train_times()
         _LOGGER.debug(
