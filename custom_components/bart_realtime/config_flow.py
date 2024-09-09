@@ -50,9 +50,7 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         #     return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
-            valid = await self._test_credentials(
-                user_input[CONF_API_KEY], user_input[CONF_STATION]
-            )
+            valid = await self._test_credentials(user_input)
             if valid:
                 return self.async_create_entry(
                     title=user_input[CONF_STATION], data=user_input
@@ -77,15 +75,15 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=self._errors,
         )
 
-    async def _test_credentials(self, api_key, station):
+    async def _test_credentials(self, user_input):
         """Return true if credentials is valid."""
         try:
-            _LOGGER.debug(
-                "Test credentials api_key: %s and station: %s", api_key, station
-            )
+            _LOGGER.debug("Test credentials user_input: %s", user_input)
             session = async_create_clientsession(self.hass)
+            api_key = user_input[CONF_API_KEY]
+            station = user_input[CONF_STATION]
             client = BartRealtimeApiClient(api_key, station, session)
-            await client.async_get_data()
+            await client.async_validate()
             return True
         except Exception:  # pylint: disable=broad-except
             pass

@@ -32,6 +32,10 @@ async def main():
     print(f"Going with all_train_lines: {all_train_lines}")
     async with aiohttp.ClientSession() as client:
         bart_api = BartRealtimeApiClient(API_KEY, STATION, client)
+        # First validate credentials like in auth flow
+        validation_response = await bart_api.async_validate()
+        print("First validation response")
+        pprint.pprint(validation_response)
         # First do raw xml train times
         json_train_times = await bart_api.async_get_json_train_times()
         print("Raw json train times incoming")

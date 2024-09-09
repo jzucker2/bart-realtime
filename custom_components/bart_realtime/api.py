@@ -45,6 +45,11 @@ class BartRealtimeApiClient:
     def station(self):
         return self._station
 
+    async def async_validate(self) -> BartETDRootResponse:
+        """Validate by getting data from the API."""
+        # TODO: add a check for station in all stations and maybe even call station detail
+        return await self.async_get_data()
+
     async def async_get_data(self) -> BartETDRootResponse:
         """Get data from the API."""
         return await self.async_get_transformed_train_times()
