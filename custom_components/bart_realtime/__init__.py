@@ -6,6 +6,7 @@ https://github.com/jzucker2/bart-realtime
 """
 
 import asyncio
+from dataclasses import dataclass
 from datetime import timedelta
 import logging
 
@@ -30,21 +31,42 @@ SCAN_INTERVAL = timedelta(seconds=30)
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
+# The type alias needs to be suffixed with 'ConfigEntry'
+type BartRealtimeConfigEntry = ConfigEntry[BartRealtimeData]
+
+
+@dataclass
+class BartRealtimeData:
+    api_key: str
+    station: str
+
+    @classmethod
+    def from_entry(cls, entry: BartRealtimeConfigEntry):
+        _LOGGER.debug(
+            "Processing data config entry: %s with entry.data: %s", entry, entry.data
+        )
+        api_key = entry.data.get(CONF_API_KEY)
+        station = entry.data.get(CONF_STATION)
+        return cls(api_key=api_key, station=station)
+
+
 async def async_setup(hass: HomeAssistant, config: Config):
     """Set up this integration using YAML is not supported."""
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: BartRealtimeConfigEntry,
+):
     """Set up this integration using UI."""
     if hass.data.get(DOMAIN) is None:
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
 
     session = async_get_clientsession(hass)
-    api_key = entry.data.get(CONF_API_KEY)
-    station = entry.data.get(CONF_STATION)
-    client = BartRealtimeApiClient(api_key, station, session)
+    data = BartRealtimeData.from_entry(entry)
+    client = BartRealtimeApiClient(data.api_key, data.station, session)
 
     coordinator = BartRealtimeDataUpdateCoordinator(hass, client=client)
     await coordinator.async_refresh()
@@ -123,7 +145,10 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
             return False
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(
+    hass: HomeAssistant,
+    entry: BartRealtimeConfigEntry,
+) -> bool:
     """Handle removal of an entry."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     unloaded = all(
@@ -141,7 +166,10 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return unloaded
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+async def async_reload_entry(
+    hass: HomeAssistant,
+    entry: BartRealtimeConfigEntry,
+) -> None:
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)

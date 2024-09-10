@@ -2,12 +2,17 @@
 
 from homeassistant.components.text import TextEntity
 
+from . import BartRealtimeConfigEntry
 from .bart_trains import BartTrainLines
 from .const import DEFAULT_NAME, DOMAIN, TEXT
 from .entity import BartRealtimeEntity
 
 
-async def async_setup_entry(hass, entry, async_add_devices):
+async def async_setup_entry(
+    hass,
+    entry: BartRealtimeConfigEntry,
+    async_add_devices,
+):
     """Setup text platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_devices(
