@@ -49,10 +49,12 @@ async def main():
         print(f"Type of tran_train_times => {type(tran_train_times)}")
         latest_minutes = tran_train_times.get_current_train_minutes(TEST_TRAIN)
         latest_direction = tran_train_times.get_current_train_direction(TEST_TRAIN)
+        has_current_train_data = tran_train_times.has_current_train_data(TEST_TRAIN)
         print(
             f"For TEST_TRAIN: {TEST_TRAIN} got "
             f"latest_minutes: {latest_minutes} in "
-            f"latest_direction: {latest_direction}"
+            f"latest_direction: {latest_direction} "
+            f"with has_current_train_data: {has_current_train_data}"
         )
 
 

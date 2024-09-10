@@ -123,6 +123,10 @@ class BartETDRootResponse:
     def get_current_train_data(self, train_name):
         return self.train_lines.get(train_name)
 
+    def has_current_train_data(self, train_name):
+        train_data = self.train_lines.get(train_name)
+        return bool(train_data is not None)
+
     def get_current_train_minutes(self, train_name):
         return self.get_current_train_data(train_name).latest_minutes
 
