@@ -1,10 +1,11 @@
 """Sensor platform for Bart Realtime."""
 
+from . import BartRealtimeConfigEntry
 from .const import DEFAULT_NAME, DOMAIN, ICON, SENSOR
 from .entity import BartRealtimeEntity
 
 
-async def async_setup_entry(hass, entry, async_add_devices):
+async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devices):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_devices([BartRealtimeSensor(coordinator, entry)])
