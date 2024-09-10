@@ -84,6 +84,10 @@ async def async_setup_entry(
     return True
 
 
+class BartRealtimeDataUnavailable(Exception):
+    pass
+
+
 class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
@@ -116,6 +120,9 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as exception:
             raise UpdateFailed() from exception
 
+    def has_current_train_data(self, train_name):
+        return self.data.has_current_train_data(train_name)
+
     def get_current_train_data(self, train_name):
         return self.data.get_current_train_data(train_name)
 
@@ -123,7 +130,11 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             return self.data.get_current_train_minutes(train_name)
         except AttributeError:
-            return MISSING_VALUE
+            _LOGGER.error(
+                "Bart data update coordinator get current minutes missing data for train_name: %s",
+                train_name,
+            )
+            raise BartRealtimeDataUnavailable(f"train_name: {train_name} is missing")
 
     def get_current_direction(self, train_name):
         try:

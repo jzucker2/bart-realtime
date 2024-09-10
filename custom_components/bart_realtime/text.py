@@ -1,11 +1,15 @@
 """Text sensor platform for Bart Realtime."""
 
+import logging
+
 from homeassistant.components.text import TextEntity
 
-from . import BartRealtimeConfigEntry
+from . import MISSING_VALUE, BartRealtimeConfigEntry, BartRealtimeDataUnavailable
 from .bart_trains import BartTrainLines
 from .const import DEFAULT_NAME, DOMAIN, TEXT
 from .entity import BartRealtimeEntity
+
+_LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 async def async_setup_entry(
@@ -59,6 +63,20 @@ class BartRealtimeTextSensor(BartRealtimeEntity, TextEntity):
         return self.train_name.replace(" /", "_").lower()
 
     @property
+    def available(self) -> bool:
+        return self.coordinator.has_current_train_data(self.train_name)
+
+    @property
     def state(self):
         """Return value of the text if data exists."""
-        return self.coordinator.get_current_minutes(self.train_name)
+        try:
+            return self.coordinator.get_current_minutes(self.train_name)
+        except BartRealtimeDataUnavailable:
+            return MISSING_VALUE
+        except Exception as unexp:
+            _LOGGER.error(
+                "Setting text sensor state missing for self.train_name: %s with unexp: %s",
+                self.train_name,
+                unexp,
+            )
+            return MISSING_VALUE
