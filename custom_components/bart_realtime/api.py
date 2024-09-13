@@ -7,7 +7,7 @@ import socket
 import aiohttp
 import async_timeout
 
-from .bart_api_response import BartETDRootResponse
+from .bart_api_response import BartBSARootResponse, BartETDRootResponse
 from .const import DEFAULT_API_KEY
 
 TIMEOUT = 10
@@ -26,6 +26,7 @@ class BartRealtimeApiClient:
         self._session = session
         # TODO: start supplying or allowing an api_key
         self._base_url = self.build_base_url(station)
+        self._announcement_base_url = self.build_base_announcement_url()
 
     @classmethod
     def build_base_url(cls, station_abbr, api_key=DEFAULT_API_KEY):
@@ -33,9 +34,19 @@ class BartRealtimeApiClient:
         _LOGGER.debug("bart api client building base_url: %s", base_url)
         return base_url
 
+    @classmethod
+    def build_base_announcement_url(cls, api_key=DEFAULT_API_KEY):
+        a_base_url = f"https://api.bart.gov/api/bsa.aspx?cmd=bsa&key={api_key}&json=y"
+        _LOGGER.debug("bart api client building announcement base_url: %s", a_base_url)
+        return a_base_url
+
     @property
     def base_url(self):
         return self._base_url
+
+    @property
+    def announcement_base_url(self):
+        return self._announcement_base_url
 
     @property
     def api_key(self):
@@ -74,6 +85,28 @@ class BartRealtimeApiClient:
             "Data fetched for transform async json_train_times: %s", json_train_times
         )
         return self.transform_train_times(json_train_times)
+
+    async def async_get_json_announcements(self) -> dict:
+        """Get data from the API."""
+        return await self.api_wrapper("get", self.announcement_base_url)
+
+    @classmethod
+    def transform_announcements(cls, input_data) -> BartBSARootResponse:
+        _LOGGER.debug("Transform announcements input_data: %s", input_data)
+
+        bart_response = BartBSARootResponse.from_response(input_data)
+
+        _LOGGER.debug("Transform announcements bart_response: %s", bart_response)
+        return bart_response
+
+    async def async_get_transformed_announcements(self) -> BartBSARootResponse:
+        """Get data from the API."""
+        json_announcements = await self.async_get_json_announcements()
+        _LOGGER.debug(
+            "Data fetched for transform async json_announcements: %s",
+            json_announcements,
+        )
+        return self.transform_announcements(json_announcements)
 
     async def api_wrapper(
         self, method: str, url: str, data: dict = {}, headers: dict = {}
