@@ -39,15 +39,19 @@ type BartRealtimeConfigEntry = ConfigEntry[BartRealtimeData]
 class BartRealtimeData:
     api_key: str
     station: str
+    client: BartRealtimeApiClient
 
     @classmethod
-    def from_entry(cls, entry: BartRealtimeConfigEntry):
+    def from_entry(cls, entry: BartRealtimeConfigEntry, session):
         _LOGGER.debug(
             "Processing data config entry: %s with entry.data: %s", entry, entry.data
         )
         api_key = entry.data.get(CONF_API_KEY)
         station = entry.data.get(CONF_STATION)
-        return cls(api_key=api_key, station=station)
+
+        client = BartRealtimeApiClient(api_key, station, session)
+
+        return cls(api_key=api_key, station=station, client=client)
 
 
 async def async_setup(hass: HomeAssistant, config: Config):
@@ -65,10 +69,12 @@ async def async_setup_entry(
         _LOGGER.info(STARTUP_MESSAGE)
 
     session = async_get_clientsession(hass)
-    data = BartRealtimeData.from_entry(entry)
-    client = BartRealtimeApiClient(data.api_key, data.station, session)
+    data = BartRealtimeData.from_entry(entry, session)
 
-    coordinator = BartRealtimeDataUpdateCoordinator(hass, client=client)
+    # Assign the runtime_data
+    entry.runtime_data = data
+
+    coordinator = BartRealtimeDataUpdateCoordinator(hass, client=data.client)
     await coordinator.async_refresh()
 
     if not coordinator.last_update_success:
