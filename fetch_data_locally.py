@@ -56,6 +56,10 @@ async def main():
             f"latest_direction: {latest_direction} "
             f"with has_current_train_data: {has_current_train_data}"
         )
+        # Now do transformed announcements
+        tran_announcements = await bart_api.async_get_transformed_announcements()
+        print("Transformed announcements incoming")
+        pprint.pprint(tran_announcements)
 
 
 if __name__ == "__main__":

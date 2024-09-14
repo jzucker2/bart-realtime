@@ -140,3 +140,64 @@ class BartETDRootResponse:
         if not self.response_time:
             return False
         return True
+
+
+@dataclass(frozen=True, kw_only=True)
+class BSAAnnouncement:
+    station: str
+    description: str
+    sms_text: str
+    id: Optional[str] = None
+    type: Optional[str] = None
+    posted: Optional[str] = None
+    expires: Optional[str] = None
+
+    @classmethod
+    def from_response(cls, input_data):
+        description_dict = input_data["description"]
+        sms_dict = input_data["sms_text"]
+        return cls(
+            station=input_data["station"],
+            description=description_dict["#cdata-section"],
+            sms_text=sms_dict["#cdata-section"],
+            id=input_data.get("@id"),
+            type=input_data.get("type"),
+            posted=input_data.get("posted"),
+            expires=input_data.get("expires"),
+        )
+
+
+@dataclass(frozen=True, kw_only=True)
+class BartBSARootResponse:
+    # TODO: need to turn into a datetime object
+    response_date: str
+    response_time: str
+    message: Optional[str] = None
+    announcements: list = None
+
+    @classmethod
+    def from_response(cls, input_data):
+        final_announcements = []
+
+        root_data = input_data["root"]
+        if not root_data:
+            # TODO: make sure I properly handle this exception
+            raise BartRootResponseException("no root data")
+
+        root_date = root_data["date"]
+        root_message = root_data["message"]
+        root_time = root_data["time"]
+
+        announcements = root_data["bsa"]
+
+        for announcement in announcements:
+            _LOGGER.debug("Build response announcement: %s", announcement)
+            announcement_response = BSAAnnouncement.from_response(announcement)
+            final_announcements.append(announcement_response)
+
+        return cls(
+            response_date=root_date,
+            response_time=root_time,
+            message=root_message,
+            announcements=final_announcements,
+        )

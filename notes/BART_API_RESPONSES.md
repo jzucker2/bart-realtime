@@ -8740,3 +8740,130 @@
   }
 }
 ```
+
+### Service Advisories
+
+```
+https://api.bart.gov/api/bsa.aspx?cmd=bsa&key=MW9S-E7SL-26DU-VV8V&json=y
+```
+
+```
+{
+  "?xml": {
+    "@version": "1.0",
+    "@encoding": "utf-8"
+  },
+  "root": {
+    "@id": "1",
+    "uri": {
+      "#cdata-section": "http://api.bart.gov/api/bsa.aspx?cmd=bsa&json=y"
+    },
+    "date": "09/13/2024",
+    "time": "16:27:01 PM PDT",
+    "bsa": [
+      {
+        "@id": "277857",
+        "station": "BART",
+        "type": "DELAY",
+        "description": {
+          "#cdata-section": "There is currently no Green line service between Berryessa and Daly City.   "
+        },
+        "sms_text": {
+          "#cdata-section": "Currently no green line svc between berryessa and DALY."
+        },
+        "posted": "Fri Sep 13 2024 01:41 PM PDT",
+        "expires": "Thu Dec 31 2037 11:59 PM PST"
+      },
+      {
+        "@id": "277867",
+        "station": "BART",
+        "type": "DELAY",
+        "description": {
+          "#cdata-section": "There is a major delay on the Berryessa Line in all directions due to an equipment problem on the track. There is limited orange line service between Hayward and Berryessa station. AC Transit is providing bus service between Hayward and Fremont on bus 99.  "
+        },
+        "sms_text": {
+          "#cdata-section": "Major delay on berryessa line in all dirs due to equip prob. Limited orange line svc between HAYW and berryessa stn. Ac transit is providing bus svc between HAYW and FRMT on bus 99."
+        },
+        "posted": "Fri Sep 13 2024 04:24 PM PDT",
+        "expires": "Thu Dec 31 2037 11:59 PM PST"
+      },
+      {
+        "@id": "277865",
+        "station": "BART",
+        "type": "DELAY",
+        "description": {
+          "#cdata-section": "The Market and 5th St. entrance at Powell St. station has reopened. The exit was previously closed due to police activity. "
+        },
+        "sms_text": {
+          "#cdata-section": "Market and 5th st entrance at POWL stn has reopened. Exit was previously closed due to police activity."
+        },
+        "posted": "Fri Sep 13 2024 03:57 PM PDT",
+        "expires": "Thu Dec 31 2037 11:59 PM PST"
+      }
+    ],
+    "message": ""
+  }
+}
+```
+
+```
+{
+  "?xml": {
+    "@version": "1.0",
+    "@encoding": "utf-8"
+  },
+  "root": {
+    "@id": "1",
+    "uri": {
+      "#cdata-section": "http://api.bart.gov/api/bsa.aspx?cmd=bsa&json=y"
+    },
+    "date": "09/14/2024",
+    "time": "11:05:00 AM PDT",
+    "bsa": [
+      {
+        "@id": "277895",
+        "station": "BART",
+        "type": "DELAY",
+        "description": {
+          "#cdata-section": "There is a 20-minute delay on the Oakland Airport Connector in both directions due to track maintenance. "
+        },
+        "sms_text": {
+          "#cdata-section": "20 min delay on Oak airport connector in both dirs due to track maint."
+        },
+        "posted": "Sat Sep 14 2024 11:03 AM PDT",
+        "expires": "Thu Dec 31 2037 11:59 PM PST"
+      }
+    ],
+    "message": ""
+  }
+}
+```
+
+```
+{
+  "?xml": {
+    "@version": "1.0",
+    "@encoding": "utf-8"
+  },
+  "root": {
+    "@id": "1",
+    "uri": {
+      "#cdata-section": "http://api.bart.gov/api/bsa.aspx?cmd=bsa&json=y"
+    },
+    "date": "09/14/2024",
+    "time": "13:32:01 PM PDT",
+    "bsa": [
+      {
+        "station": "",
+        "description": {
+          "#cdata-section": "No delays reported."
+        },
+        "sms_text": {
+          "#cdata-section": "No delays reported."
+        }
+      }
+    ],
+    "message": ""
+  }
+}
+```
