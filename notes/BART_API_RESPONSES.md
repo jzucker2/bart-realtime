@@ -8805,3 +8805,36 @@ https://api.bart.gov/api/bsa.aspx?cmd=bsa&key=MW9S-E7SL-26DU-VV8V&json=y
   }
 }
 ```
+
+```
+{
+  "?xml": {
+    "@version": "1.0",
+    "@encoding": "utf-8"
+  },
+  "root": {
+    "@id": "1",
+    "uri": {
+      "#cdata-section": "http://api.bart.gov/api/bsa.aspx?cmd=bsa&json=y"
+    },
+    "date": "09/14/2024",
+    "time": "11:05:00 AM PDT",
+    "bsa": [
+      {
+        "@id": "277895",
+        "station": "BART",
+        "type": "DELAY",
+        "description": {
+          "#cdata-section": "There is a 20-minute delay on the Oakland Airport Connector in both directions due to track maintenance. "
+        },
+        "sms_text": {
+          "#cdata-section": "20 min delay on Oak airport connector in both dirs due to track maint."
+        },
+        "posted": "Sat Sep 14 2024 11:03 AM PDT",
+        "expires": "Thu Dec 31 2037 11:59 PM PST"
+      }
+    ],
+    "message": ""
+  }
+}
+```
