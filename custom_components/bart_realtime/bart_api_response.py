@@ -144,26 +144,26 @@ class BartETDRootResponse:
 
 @dataclass(frozen=True, kw_only=True)
 class BSAAnnouncement:
-    id: str
     station: str
-    type: str
     description: str
     sms_text: str
-    posted: str
-    expires: str
+    id: Optional[str] = None
+    type: Optional[str] = None
+    posted: Optional[str] = None
+    expires: Optional[str] = None
 
     @classmethod
     def from_response(cls, input_data):
         description_dict = input_data["description"]
         sms_dict = input_data["sms_text"]
         return cls(
-            id=input_data["@id"],
             station=input_data["station"],
-            type=input_data["type"],
             description=description_dict["#cdata-section"],
             sms_text=sms_dict["#cdata-section"],
-            posted=input_data["posted"],
-            expires=input_data["expires"],
+            id=input_data.get("@id"),
+            type=input_data.get("type"),
+            posted=input_data.get("posted"),
+            expires=input_data.get("expires"),
         )
 
 

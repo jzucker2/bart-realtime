@@ -8838,3 +8838,32 @@ https://api.bart.gov/api/bsa.aspx?cmd=bsa&key=MW9S-E7SL-26DU-VV8V&json=y
   }
 }
 ```
+
+```
+{
+  "?xml": {
+    "@version": "1.0",
+    "@encoding": "utf-8"
+  },
+  "root": {
+    "@id": "1",
+    "uri": {
+      "#cdata-section": "http://api.bart.gov/api/bsa.aspx?cmd=bsa&json=y"
+    },
+    "date": "09/14/2024",
+    "time": "13:32:01 PM PDT",
+    "bsa": [
+      {
+        "station": "",
+        "description": {
+          "#cdata-section": "No delays reported."
+        },
+        "sms_text": {
+          "#cdata-section": "No delays reported."
+        }
+      }
+    ],
+    "message": ""
+  }
+}
+```
