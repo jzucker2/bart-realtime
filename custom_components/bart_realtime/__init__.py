@@ -16,7 +16,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import BartRealtimeApiClient
-from .const import CONF_API_KEY, CONF_STATION, PLATFORMS, STARTUP_MESSAGE
+from .const import CONF_API_KEY, CONF_STATION, PLATFORMS
 from .coordinator import BartRealtimeDataUpdateCoordinator
 
 SCAN_INTERVAL = timedelta(seconds=30)
@@ -89,8 +89,8 @@ async def async_setup_entry(
     entry: BartRealtimeConfigEntry,
 ):
     """Set up this integration using UI."""
-    if entry.runtime_data is None:
-        _LOGGER.info(STARTUP_MESSAGE)
+    # if entry.runtime_data is None:
+    #     _LOGGER.info(STARTUP_MESSAGE)
 
     entry_config_data = BartRealtimeEntryConfigData.from_entry(entry)
 
