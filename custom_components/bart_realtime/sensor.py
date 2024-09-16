@@ -14,6 +14,9 @@ from .entity import BartRealtimeEntity
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 ATTR_DIRECTION = "direction"
+ATTR_COLOR = "color"
+ATTR_DELAY = "delay"
+ATTR_HEXCOLOR = "hexcolor"
 
 
 async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devices):
@@ -92,6 +95,18 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
         return self.coordinator.get_current_direction(self.train_name)
 
     @property
+    def delay(self):
+        return self.coordinator.get_current_delay(self.train_name)
+
+    @property
+    def color(self):
+        return self.coordinator.get_current_color(self.train_name)
+
+    @property
+    def hexcolor(self):
+        return self.coordinator.get_current_hexcolor(self.train_name)
+
+    @property
     def available(self) -> bool:
         return self.coordinator.has_current_train_data(self.train_name)
 
@@ -116,6 +131,9 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
     def _get_extra_state_attributes(self) -> Mapping[str, Any] | None:
         final_dict = {
             ATTR_DIRECTION: self.direction,
+            ATTR_DELAY: self.delay,
+            ATTR_COLOR: self.color,
+            ATTR_HEXCOLOR: self.hexcolor,
         }
         return dict(final_dict)
 

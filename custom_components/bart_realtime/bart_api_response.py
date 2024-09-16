@@ -74,6 +74,18 @@ class TrainLineResponse:
     def latest_direction(self):
         return self.latest_estimate.direction
 
+    @property
+    def latest_delay(self):
+        return self.latest_estimate.delay
+
+    @property
+    def latest_color(self):
+        return self.latest_estimate.color
+
+    @property
+    def latest_hexcolor(self):
+        return self.latest_estimate.hexcolor
+
 
 @dataclass(frozen=True, kw_only=True)
 class BartETDRootResponse:
@@ -132,6 +144,15 @@ class BartETDRootResponse:
 
     def get_current_train_direction(self, train_name):
         return self.get_current_train_data(train_name).latest_direction
+
+    def get_current_train_delay(self, train_name):
+        return self.get_current_train_data(train_name).latest_delay
+
+    def get_current_train_color(self, train_name):
+        return self.get_current_train_data(train_name).latest_color
+
+    def get_current_train_hexcolor(self, train_name):
+        return self.get_current_train_data(train_name).latest_hexcolor
 
     @property
     def is_connected(self):

@@ -117,3 +117,21 @@ class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordina
             return self.data.get_current_train_direction(train_name)
         except AttributeError:
             return MISSING_VALUE
+
+    def get_current_delay(self, train_name):
+        try:
+            return self.data.get_current_train_delay(train_name)
+        except AttributeError:
+            return MISSING_VALUE
+
+    def get_current_color(self, train_name):
+        try:
+            return self.data.get_current_train_color(train_name)
+        except AttributeError:
+            return MISSING_VALUE
+
+    def get_current_hexcolor(self, train_name):
+        try:
+            return self.data.get_current_train_hexcolor(train_name)
+        except AttributeError:
+            return MISSING_VALUE
