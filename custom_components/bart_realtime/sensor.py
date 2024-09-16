@@ -8,7 +8,8 @@ from homeassistant.components.sensor import SensorEntity
 
 from . import BartRealtimeConfigEntry
 from .bart_trains import BartTrainLines
-from .const import DEFAULT_NAME, ICON, MISSING_VALUE, TRAIN_SENSOR
+from .const import ICON, MISSING_VALUE
+from .coordinator import BartRealtimeTrainsDataUpdateCoordinator
 from .entity import BartRealtimeEntity
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
@@ -41,6 +42,10 @@ class BartRealtimeLastUpdatedSensor(BartRealtimeEntity):
         return f"Bart {self.coordinator.coordinator_type} Last Updated Time"
 
     @property
+    def unique_id_suffix(self):
+        return "last_updated_time"
+
+    @property
     def state(self):
         """Return the state of the sensor."""
         return self.coordinator.get_sensor_last_updated_time()
@@ -59,19 +64,14 @@ class BartRealtimeLastUpdatedSensor(BartRealtimeEntity):
 class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
     """bart_realtime train class."""
 
-    def __init__(self, coordinator, config_entry, train_name):
+    def __init__(
+        self,
+        coordinator: BartRealtimeTrainsDataUpdateCoordinator,
+        config_entry,
+        train_name,
+    ):
         super().__init__(coordinator, config_entry)
         self._train_name = train_name
-        self._attr_unique_id = f"{self.get_unique_entity_base_name()}-{coordinator.safe_bart_station}-{train_name}"
-
-    @classmethod
-    def get_base_entity_name(self, separator="_"):
-        """Return the base entity of the text."""
-        return f"{DEFAULT_NAME}{separator}{TRAIN_SENSOR}"
-
-    @classmethod
-    def get_unique_entity_base_name(cls):
-        return cls.get_base_entity_name(separator="_")
 
     @property
     def name(self):
@@ -79,9 +79,12 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
         return self.train_name
 
     @property
-    def unique_id(self) -> str:
-        """Return a unique ID."""
-        return f"{self.get_unique_entity_base_name()}_{self.safe_bart_station}_{self.sanitized_train_name}"
+    def safe_bart_station(self):
+        return self.coordinator.safe_bart_station
+
+    @property
+    def unique_id_suffix(self):
+        return f"{self.safe_bart_station}_{self.sanitized_train_name}"
 
     @property
     def train_name(self):
