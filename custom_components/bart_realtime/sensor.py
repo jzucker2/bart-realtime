@@ -224,7 +224,7 @@ class BartRealtimeAnnouncementSensor(BartRealtimeEntity, SensorEntity):
     def friendly_display_value(self):
         """Return value of the text if data exists."""
         try:
-            return self.announcement_description
+            return self.sms_text
         except Exception as unexp:
             _LOGGER.error(
                 "Setting sensor state missing for self: %s with unexp: %s",
