@@ -4,9 +4,10 @@ import logging
 
 from homeassistant.components.text import TextEntity
 
-from . import MISSING_VALUE, BartRealtimeConfigEntry, BartRealtimeDataUnavailable
+from . import BartRealtimeConfigEntry
 from .bart_trains import BartTrainLines
-from .const import DEFAULT_NAME, DOMAIN, TEXT
+from .const import DEFAULT_NAME, DOMAIN, MISSING_VALUE, TEXT
+from .coordinator import BartRealtimeDataUnavailable
 from .entity import BartRealtimeEntity
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
