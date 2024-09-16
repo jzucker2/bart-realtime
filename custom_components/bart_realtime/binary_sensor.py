@@ -65,11 +65,6 @@ class BartRealtimeHasAnnouncementsBinarySensor(BartRealtimeEntity, BinarySensorE
         return "has_announcements"
 
     @property
-    def device_class(self):
-        """Return the class of this binary_sensor."""
-        return BINARY_SENSOR_DEVICE_CLASS
-
-    @property
     def is_on(self):
         """Return true if the binary_sensor has announcements available."""
         return self.coordinator.has_current_announcements()
