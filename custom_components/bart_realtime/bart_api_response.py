@@ -67,6 +67,10 @@ class TrainLineResponse:
         return self.estimates[0]
 
     @property
+    def all_estimates(self):
+        return [e.minutes for e in self.estimates]
+
+    @property
     def latest_minutes(self):
         return self.latest_estimate.minutes
 
@@ -138,6 +142,9 @@ class BartETDRootResponse:
     def has_current_train_data(self, train_name):
         train_data = self.train_lines.get(train_name)
         return bool(train_data is not None)
+
+    def get_current_train_all_estimates(self, train_name):
+        return self.get_current_train_data(train_name).all_estimates
 
     def get_current_train_minutes(self, train_name):
         return self.get_current_train_data(train_name).latest_minutes

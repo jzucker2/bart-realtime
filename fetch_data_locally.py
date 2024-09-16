@@ -53,6 +53,7 @@ async def main():
         latest_color = tran_train_times.get_current_train_color(TEST_TRAIN)
         latest_hexcolor = tran_train_times.get_current_train_hexcolor(TEST_TRAIN)
         has_current_train_data = tran_train_times.has_current_train_data(TEST_TRAIN)
+        all_estimates = tran_train_times.get_current_train_all_estimates(TEST_TRAIN)
         print(
             f"For TEST_TRAIN: {TEST_TRAIN} got "
             f"latest_minutes: {latest_minutes} in "
@@ -60,7 +61,8 @@ async def main():
             f"with has_current_train_data: {has_current_train_data} "
             f"with extra info like latest_delay: {latest_delay} "
             f"and latest_color: {latest_color} "
-            f"also latest_hexcolor: {latest_hexcolor}"
+            f"also latest_hexcolor: {latest_hexcolor} "
+            f"and finally all_estimates: {all_estimates}"
         )
         # Now do transformed announcements
         tran_announcements = await bart_api.async_get_transformed_announcements()
