@@ -39,7 +39,7 @@ class BartRealtimeLastUpdatedSensor(BartRealtimeEntity):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return f"Bart {self.coordinator.coordinator_type} Last Updated Time"
+        return f"Bart {self.coordinator_type} Last Updated Time"
 
     @property
     def unique_id_suffix(self):
