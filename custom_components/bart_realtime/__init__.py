@@ -5,26 +5,19 @@ For more details about this integration, please refer to
 https://github.com/jzucker2/bart-realtime
 """
 
-import asyncio
 from dataclasses import dataclass
 from datetime import timedelta
 import logging
+from typing import NamedTuple
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import BartRealtimeApiClient
-from .const import (
-    CONF_API_KEY,
-    CONF_STATION,
-    DOMAIN,
-    MISSING_VALUE,
-    PLATFORMS,
-    STARTUP_MESSAGE,
-)
+from .const import CONF_API_KEY, CONF_STATION, PLATFORMS, STARTUP_MESSAGE
+from .coordinator import BartRealtimeDataUpdateCoordinator
 
 SCAN_INTERVAL = timedelta(seconds=30)
 
@@ -35,23 +28,55 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 type BartRealtimeConfigEntry = ConfigEntry[BartRealtimeData]
 
 
+class BartUpdateCoordinators(NamedTuple):
+    """Bart update coordinators stored in the Home Assistant runtime_data object."""
+
+    trains_coordinator: BartRealtimeDataUpdateCoordinator
+
+
 @dataclass
-class BartRealtimeData:
+class BartRealtimeEntryConfigData:
     api_key: str
     station: str
-    client: BartRealtimeApiClient
 
     @classmethod
-    def from_entry(cls, entry: BartRealtimeConfigEntry, session):
+    def from_entry(cls, entry: BartRealtimeConfigEntry):
         _LOGGER.debug(
             "Processing data config entry: %s with entry.data: %s", entry, entry.data
         )
         api_key = entry.data.get(CONF_API_KEY)
         station = entry.data.get(CONF_STATION)
+        return cls(api_key=api_key, station=station)
 
-        client = BartRealtimeApiClient(api_key, station, session)
 
-        return cls(api_key=api_key, station=station, client=client)
+@dataclass
+class BartRealtimeData:
+    entry_config_data: BartRealtimeEntryConfigData
+    client: BartRealtimeApiClient
+    coordinators: BartUpdateCoordinators
+
+    @classmethod
+    def from_entry(cls, hass, entry_config_data: BartRealtimeEntryConfigData):
+        _LOGGER.debug("Processing data config entry_config_data: %s", entry_config_data)
+
+        session = async_get_clientsession(hass)
+
+        client = BartRealtimeApiClient(
+            entry_config_data.api_key, entry_config_data.station, session
+        )
+
+        trains_coordinator = BartRealtimeDataUpdateCoordinator(hass, client)
+        coordinators = BartUpdateCoordinators(trains_coordinator=trains_coordinator)
+
+        return cls(
+            entry_config_data=entry_config_data,
+            client=client,
+            coordinators=coordinators,
+        )
+
+    @property
+    def trains_coordinator(self):
+        return self.coordinators.trains_coordinator
 
 
 async def async_setup(hass: HomeAssistant, config: Config):
@@ -64,102 +89,30 @@ async def async_setup_entry(
     entry: BartRealtimeConfigEntry,
 ):
     """Set up this integration using UI."""
-    if hass.data.get(DOMAIN) is None:
-        hass.data.setdefault(DOMAIN, {})
+    if entry.runtime_data is None:
         _LOGGER.info(STARTUP_MESSAGE)
 
-    session = async_get_clientsession(hass)
-    data = BartRealtimeData.from_entry(entry, session)
+    entry_config_data = BartRealtimeEntryConfigData.from_entry(entry)
+
+    data = BartRealtimeData.from_entry(hass, entry_config_data)
 
     # Assign the runtime_data
     entry.runtime_data = data
 
-    coordinator = BartRealtimeDataUpdateCoordinator(hass, client=data.client)
-    await coordinator.async_refresh()
+    trains_coordinator = data.trains_coordinator
+    await trains_coordinator.async_refresh()
 
-    if not coordinator.last_update_success:
+    if not trains_coordinator.last_update_success:
         raise ConfigEntryNotReady
 
-    hass.data[DOMAIN][entry.entry_id] = coordinator
+    trains_coordinator.set_platforms(PLATFORMS)
 
-    coordinator.set_platforms(PLATFORMS)
-    # https://developers.home-assistant.io/blog/2024/03/13/deprecate_add_run_job
-    hass.async_add_job(hass.config_entries.async_forward_entry_setups(entry, PLATFORMS))
+    # Set up all platforms for this device/entry.
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    entry.add_update_listener(async_reload_entry)
+    # Reload entry when its updated.
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
     return True
-
-
-class BartRealtimeDataUnavailable(Exception):
-    pass
-
-
-class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching data from the API."""
-
-    def __init__(
-        self,
-        hass: HomeAssistant,
-        client: BartRealtimeApiClient,
-    ) -> None:
-        """Initialize."""
-        self.api = client
-        self.platforms = []
-
-        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
-
-    def set_platforms(self, configured_platforms):
-        self.platforms = configured_platforms
-
-    @property
-    def bart_station(self):
-        return self.api.station
-
-    @property
-    def safe_bart_station(self):
-        return self.bart_station.lower()
-
-    async def _async_update_data(self):
-        """Update data via library."""
-        try:
-            return await self.api.async_get_data()
-        except Exception as exception:
-            raise UpdateFailed() from exception
-
-    def has_current_train_data(self, train_name):
-        return self.data.has_current_train_data(train_name)
-
-    def get_current_train_data(self, train_name):
-        return self.data.get_current_train_data(train_name)
-
-    def get_current_minutes(self, train_name):
-        try:
-            return self.data.get_current_train_minutes(train_name)
-        except AttributeError:
-            _LOGGER.error(
-                "Bart data update coordinator get current minutes missing data for train_name: %s",
-                train_name,
-            )
-            raise BartRealtimeDataUnavailable(f"train_name: {train_name} is missing")
-
-    def get_current_direction(self, train_name):
-        try:
-            return self.data.get_current_train_direction(train_name)
-        except AttributeError:
-            return MISSING_VALUE
-
-    # TODO: make this actually better
-    def get_sensor_state(self):
-        try:
-            return self.data.response_time
-        except AttributeError:
-            return MISSING_VALUE
-
-    def get_is_connected(self):
-        try:
-            return self.data.is_connected
-        except AttributeError:
-            return False
 
 
 async def async_unload_entry(
@@ -167,20 +120,12 @@ async def async_unload_entry(
     entry: BartRealtimeConfigEntry,
 ) -> bool:
     """Handle removal of an entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    unloaded = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, platform)
-                for platform in PLATFORMS
-                if platform in coordinator.platforms
-            ]
+    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
+        _LOGGER.debug(
+            "Unloading platforms entry: %s with unload_ok: %s", entry, unload_ok
         )
-    )
-    if unloaded:
-        hass.data[DOMAIN].pop(entry.entry_id)
 
-    return unloaded
+    return unload_ok
 
 
 async def async_reload_entry(
@@ -188,5 +133,4 @@ async def async_reload_entry(
     entry: BartRealtimeConfigEntry,
 ) -> None:
     """Reload config entry."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+    await hass.config_entries.async_reload(entry.entry_id)
