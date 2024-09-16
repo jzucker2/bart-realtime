@@ -22,8 +22,12 @@ class BartRealtimeEntity(CoordinatorEntity):
         return self.coordinator.coordinator_type
 
     @property
+    def safe_coordinator_type(self) -> str:
+        return self.coordinator_type.lower()
+
+    @property
     def unique_id_base(self):
-        return f"{self.config_entry_id}-{self.coordinator_type}"
+        return f"{self.config_entry_id}-{self.safe_coordinator_type}"
 
     @property
     def unique_id_suffix(self):
