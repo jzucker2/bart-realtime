@@ -5,6 +5,7 @@ import logging
 from typing import Any
 
 from homeassistant.components.sensor import SensorEntity
+from homeassistant.const import EntityCategory
 
 from . import BartRealtimeConfigEntry
 from .bart_trains import BartTrainLines
@@ -50,6 +51,8 @@ async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devi
 
 class BartRealtimeLastUpdatedSensor(BartRealtimeEntity):
     """bart_realtime Sensor class."""
+
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     @property
     def name(self):
