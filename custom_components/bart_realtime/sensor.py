@@ -9,10 +9,11 @@ from homeassistant.components.sensor import SensorEntity
 from . import BartRealtimeConfigEntry
 from .bart_trains import BartTrainLines
 from .const import DEFAULT_NAME, ICON, MISSING_VALUE, TRAIN_SENSOR
-from .coordinator import BartRealtimeDataUnavailable
 from .entity import BartRealtimeEntity
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
+
+ATTR_DIRECTION = "direction"
 
 
 async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devices):
@@ -98,9 +99,7 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
     def friendly_display_value(self):
         """Return value of the text if data exists."""
         try:
-            return self.coordinator.get_current_minutes(self.train_name)
-        except BartRealtimeDataUnavailable:
-            return MISSING_VALUE
+            return self.coordinator.get_display_time_string(self.train_name)
         except Exception as unexp:
             _LOGGER.error(
                 "Setting text sensor state missing for self.train_name: %s with unexp: %s",
@@ -116,7 +115,7 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
 
     def _get_extra_state_attributes(self) -> Mapping[str, Any] | None:
         final_dict = {
-            "direction": self.direction,
+            ATTR_DIRECTION: self.direction,
         }
         return dict(final_dict)
 

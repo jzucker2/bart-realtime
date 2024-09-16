@@ -7,7 +7,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import BartRealtimeApiClient
-from .const import DOMAIN, MISSING_VALUE
+from .const import DOMAIN, LEAVING_VALUE, MISSING_VALUE
 
 SCAN_INTERVAL = timedelta(seconds=30)
 
@@ -101,6 +101,16 @@ class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordina
                 train_name,
             )
             raise BartRealtimeDataUnavailable(f"train_name: {train_name} is missing")
+
+    def get_display_time_string(self, train_name):
+        try:
+            found_minutes = self.get_current_minutes(train_name)
+        except BartRealtimeDataUnavailable:
+            return MISSING_VALUE
+        else:
+            if found_minutes == LEAVING_VALUE:
+                return found_minutes
+            return f"{found_minutes} minutes"
 
     def get_current_direction(self, train_name):
         try:

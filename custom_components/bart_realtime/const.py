@@ -31,6 +31,7 @@ CONF_STATION = "station"
 DEFAULT_NAME = DOMAIN
 
 MISSING_VALUE = "missing"
+LEAVING_VALUE = "Leaving"
 
 
 STARTUP_MESSAGE = f"""
