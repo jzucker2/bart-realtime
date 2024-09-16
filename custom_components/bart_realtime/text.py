@@ -6,7 +6,7 @@ from homeassistant.components.text import TextEntity
 
 from . import BartRealtimeConfigEntry
 from .bart_trains import BartTrainLines
-from .const import DEFAULT_NAME, DOMAIN, MISSING_VALUE, TEXT
+from .const import DEFAULT_NAME, MISSING_VALUE, TEXT
 from .coordinator import BartRealtimeDataUnavailable
 from .entity import BartRealtimeEntity
 
@@ -19,10 +19,10 @@ async def async_setup_entry(
     async_add_devices,
 ):
     """Setup text platform."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    trains_coordinator = entry.runtime_data.trains_coordinator
     async_add_devices(
         [
-            BartRealtimeTextSensor(coordinator, entry, s.friendly_name)
+            BartRealtimeTextSensor(trains_coordinator, entry, s.friendly_name)
             for s in BartTrainLines.get_all_train_lines()
         ]
     )

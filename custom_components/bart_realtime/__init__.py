@@ -91,10 +91,11 @@ async def async_setup_entry(
     data.set_coordinators(trains_coordinator)
 
     trains_coordinator.set_platforms(PLATFORMS)
-    # https://developers.home-assistant.io/blog/2024/03/13/deprecate_add_run_job
+    # Set up all platforms for this device/entry.
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    entry.add_update_listener(async_reload_entry)
+    # Reload entry when its updated.
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
     return True
 
 
