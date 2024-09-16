@@ -67,8 +67,16 @@ class BartRealtimeBaseDataUpdateCoordinator(DataUpdateCoordinator):
 class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordinator):
     """Class to manage fetching train estimates data from the API."""
 
+    async def _async_update_data(self):
+        """Update data via library."""
+        try:
+            return await self.api.async_get_data()
+        except Exception as exception:
+            raise UpdateFailed() from exception
+
     @property
     def coordinator_type(self):
+        """Necessary to override in subclasses for sensors and entities"""
         return "Trains"
 
     @property
@@ -78,13 +86,6 @@ class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordina
     @property
     def safe_bart_station(self):
         return self.bart_station.lower()
-
-    async def _async_update_data(self):
-        """Update data via library."""
-        try:
-            return await self.api.async_get_data()
-        except Exception as exception:
-            raise UpdateFailed() from exception
 
     def has_current_train_data(self, train_name):
         return self.data.has_current_train_data(train_name)

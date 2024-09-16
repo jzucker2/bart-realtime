@@ -19,7 +19,11 @@ class BartRealtimeAPIConnectedBinarySensor(BartRealtimeEntity, BinarySensorEntit
     @property
     def name(self):
         """Return the name of the sensor."""
-        return f"Bart {self.coordinator.coordinator_type} API Connected"
+        return f"Bart {self.coordinator_type} API Connected"
+
+    @property
+    def unique_id_suffix(self):
+        return "api_connected"
 
     @property
     def device_class(self):

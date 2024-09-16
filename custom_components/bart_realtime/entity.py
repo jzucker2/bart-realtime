@@ -3,10 +3,13 @@
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, NAME, VERSION
+from .coordinator import BartRealtimeBaseDataUpdateCoordinator
 
 
 class BartRealtimeEntity(CoordinatorEntity):
-    def __init__(self, coordinator, config_entry):
+    def __init__(
+        self, coordinator: BartRealtimeBaseDataUpdateCoordinator, config_entry
+    ):
         super().__init__(coordinator)
         self.config_entry = config_entry
 
@@ -15,13 +18,26 @@ class BartRealtimeEntity(CoordinatorEntity):
         return self.config_entry.entry_id
 
     @property
-    def unique_id(self):
-        """Return a unique ID to use for this entity."""
-        return self.config_entry_id
+    def coordinator_type(self) -> str:
+        return self.coordinator.coordinator_type
 
     @property
-    def safe_bart_station(self):
-        return self.coordinator.safe_bart_station
+    def safe_coordinator_type(self) -> str:
+        return self.coordinator_type.lower()
+
+    @property
+    def unique_id_base(self):
+        return f"{self.config_entry_id}-{self.safe_coordinator_type}"
+
+    @property
+    def unique_id_suffix(self):
+        """Override in subclasses to ensure uniqueness"""
+        return "bart_entity"
+
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{self.unique_id_base}-{self.unique_id_suffix}"
 
     @property
     def device_info(self):
