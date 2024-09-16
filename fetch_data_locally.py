@@ -49,12 +49,18 @@ async def main():
         print(f"Type of tran_train_times => {type(tran_train_times)}")
         latest_minutes = tran_train_times.get_current_train_minutes(TEST_TRAIN)
         latest_direction = tran_train_times.get_current_train_direction(TEST_TRAIN)
+        latest_delay = tran_train_times.get_current_train_delay(TEST_TRAIN)
+        latest_color = tran_train_times.get_current_train_color(TEST_TRAIN)
+        latest_hexcolor = tran_train_times.get_current_train_hexcolor(TEST_TRAIN)
         has_current_train_data = tran_train_times.has_current_train_data(TEST_TRAIN)
         print(
             f"For TEST_TRAIN: {TEST_TRAIN} got "
             f"latest_minutes: {latest_minutes} in "
             f"latest_direction: {latest_direction} "
-            f"with has_current_train_data: {has_current_train_data}"
+            f"with has_current_train_data: {has_current_train_data} "
+            f"with extra info like latest_delay: {latest_delay} "
+            f"and latest_color: {latest_color} "
+            f"also latest_hexcolor: {latest_hexcolor}"
         )
         # Now do transformed announcements
         tran_announcements = await bart_api.async_get_transformed_announcements()

@@ -1,22 +1,28 @@
 """Sensor platform for Bart Realtime."""
 
+from collections.abc import Mapping
 import logging
+from typing import Any
 
 from homeassistant.components.sensor import SensorEntity
 
 from . import BartRealtimeConfigEntry
 from .bart_trains import BartTrainLines
-from .const import DEFAULT_NAME, ICON, MISSING_VALUE, SENSOR, TRAIN_SENSOR
-from .coordinator import BartRealtimeDataUnavailable
+from .const import DEFAULT_NAME, ICON, MISSING_VALUE, TRAIN_SENSOR
 from .entity import BartRealtimeEntity
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
+
+ATTR_DIRECTION = "direction"
+ATTR_COLOR = "color"
+ATTR_DELAY = "delay"
+ATTR_HEXCOLOR = "hexcolor"
 
 
 async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devices):
     """Setup sensor platform."""
     trains_coordinator = entry.runtime_data.trains_coordinator
-    async_add_devices([BartRealtimeSensor(trains_coordinator, entry)])
+    async_add_devices([BartRealtimeLastUpdatedSensor(trains_coordinator, entry)])
     async_add_devices(
         [
             BartRealtimeTrainSensor(trains_coordinator, entry, s.friendly_name)
@@ -25,18 +31,18 @@ async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devi
     )
 
 
-class BartRealtimeSensor(BartRealtimeEntity):
+class BartRealtimeLastUpdatedSensor(BartRealtimeEntity):
     """bart_realtime Sensor class."""
 
     @property
     def name(self):
         """Return the name of the sensor."""
-        return f"{DEFAULT_NAME}_{SENSOR}"
+        return f"Bart {self.coordinator.coordinator_type} Last Updated Time"
 
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self.coordinator.get_sensor_state()
+        return self.coordinator.get_sensor_last_updated_time()
 
     @property
     def icon(self):
@@ -85,16 +91,30 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
         return self.train_name.replace(" /", "_").lower()
 
     @property
+    def direction(self):
+        return self.coordinator.get_current_direction(self.train_name)
+
+    @property
+    def delay(self):
+        return self.coordinator.get_current_delay(self.train_name)
+
+    @property
+    def color(self):
+        return self.coordinator.get_current_color(self.train_name)
+
+    @property
+    def hexcolor(self):
+        return self.coordinator.get_current_hexcolor(self.train_name)
+
+    @property
     def available(self) -> bool:
         return self.coordinator.has_current_train_data(self.train_name)
 
     @property
-    def state(self):
+    def friendly_display_value(self):
         """Return value of the text if data exists."""
         try:
-            return self.coordinator.get_current_minutes(self.train_name)
-        except BartRealtimeDataUnavailable:
-            return MISSING_VALUE
+            return self.coordinator.get_display_time_string(self.train_name)
         except Exception as unexp:
             _LOGGER.error(
                 "Setting text sensor state missing for self.train_name: %s with unexp: %s",
@@ -102,3 +122,22 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
                 unexp,
             )
             return MISSING_VALUE
+
+    @property
+    def state(self):
+        """Return value of the text if data exists."""
+        return self.friendly_display_value
+
+    def _get_extra_state_attributes(self) -> Mapping[str, Any] | None:
+        final_dict = {
+            ATTR_DIRECTION: self.direction,
+            ATTR_DELAY: self.delay,
+            ATTR_COLOR: self.color,
+            ATTR_HEXCOLOR: self.hexcolor,
+        }
+        return dict(final_dict)
+
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+        """Return the state attributes of the sensor."""
+        return self._get_extra_state_attributes()

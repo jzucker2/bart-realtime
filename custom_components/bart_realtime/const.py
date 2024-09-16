@@ -4,7 +4,7 @@
 NAME = "Bart Realtime"
 DOMAIN = "bart_realtime"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.20.0"
+VERSION = "0.21.0"
 
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 ISSUE_URL = "https://github.com/jzucker2/bart-realtime/issues"
@@ -31,6 +31,7 @@ CONF_STATION = "station"
 DEFAULT_NAME = DOMAIN
 
 MISSING_VALUE = "missing"
+LEAVING_VALUE = "Leaving"
 
 
 STARTUP_MESSAGE = f"""

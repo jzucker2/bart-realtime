@@ -7,14 +7,18 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import BartRealtimeApiClient
-from .const import DOMAIN, MISSING_VALUE
+from .const import DOMAIN, LEAVING_VALUE, MISSING_VALUE
 
 SCAN_INTERVAL = timedelta(seconds=30)
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
-class BartRealtimeDataUnavailable(Exception):
+class BartRealtimeBaseDataUpdateCoordinatorException(Exception):
+    pass
+
+
+class BartRealtimeDataUnavailable(BartRealtimeBaseDataUpdateCoordinatorException):
     pass
 
 
@@ -35,6 +39,10 @@ class BartRealtimeBaseDataUpdateCoordinator(DataUpdateCoordinator):
     def set_platforms(self, configured_platforms):
         self.platforms = configured_platforms
 
+    @property
+    def coordinator_type(self):
+        raise BartRealtimeBaseDataUpdateCoordinatorException("not specified!")
+
     def get_is_connected(self):
         try:
             return self.data.is_connected
@@ -48,9 +56,20 @@ class BartRealtimeBaseDataUpdateCoordinator(DataUpdateCoordinator):
         except AttributeError:
             return MISSING_VALUE
 
+    # TODO: make this actually better
+    def get_sensor_last_updated_time(self):
+        try:
+            return self.data.response_time
+        except AttributeError:
+            return MISSING_VALUE
+
 
 class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordinator):
     """Class to manage fetching train estimates data from the API."""
+
+    @property
+    def coordinator_type(self):
+        return "Trains"
 
     @property
     def bart_station(self):
@@ -83,8 +102,36 @@ class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordina
             )
             raise BartRealtimeDataUnavailable(f"train_name: {train_name} is missing")
 
+    def get_display_time_string(self, train_name):
+        try:
+            found_minutes = self.get_current_minutes(train_name)
+        except BartRealtimeDataUnavailable:
+            return MISSING_VALUE
+        else:
+            if found_minutes == LEAVING_VALUE:
+                return found_minutes
+            return f"{found_minutes} minutes"
+
     def get_current_direction(self, train_name):
         try:
             return self.data.get_current_train_direction(train_name)
+        except AttributeError:
+            return MISSING_VALUE
+
+    def get_current_delay(self, train_name):
+        try:
+            return self.data.get_current_train_delay(train_name)
+        except AttributeError:
+            return MISSING_VALUE
+
+    def get_current_color(self, train_name):
+        try:
+            return self.data.get_current_train_color(train_name)
+        except AttributeError:
+            return MISSING_VALUE
+
+    def get_current_hexcolor(self, train_name):
+        try:
+            return self.data.get_current_train_hexcolor(train_name)
         except AttributeError:
             return MISSING_VALUE
