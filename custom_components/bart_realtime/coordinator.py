@@ -142,3 +142,48 @@ class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordina
             return self.data.get_current_train_hexcolor(train_name)
         except AttributeError:
             return MISSING_VALUE
+
+
+class BartRealtimeAnnouncementsDataUpdateCoordinator(
+    BartRealtimeBaseDataUpdateCoordinator
+):
+    """Class to manage fetching (advisory) announcements data from the API."""
+
+    async def _async_update_data(self):
+        """Update data via library."""
+        try:
+            return await self.api.async_get_transformed_announcements()
+        except Exception as exception:
+            raise UpdateFailed() from exception
+
+    @property
+    def coordinator_type(self):
+        """Necessary to override in subclasses for sensors and entities"""
+        return "Announcements"
+
+    def has_current_announcements(self):
+        return self.data.has_current_announcements()
+
+    def get_first_announcement(self):
+        return self.data.get_first_announcement()
+
+    def get_first_announcement_id(self):
+        return self.data.get_first_announcement_id()
+
+    def get_first_announcement_type(self):
+        return self.data.get_first_announcement_type()
+
+    def get_first_announcement_station(self):
+        return self.data.get_first_announcement_station()
+
+    def get_first_announcement_description(self):
+        return self.data.get_first_announcement_description()
+
+    def get_first_announcement_sms_text(self):
+        return self.data.get_first_announcement_sms_text()
+
+    def get_first_announcement_posted(self):
+        return self.data.get_first_announcement_posted()
+
+    def get_first_announcement_expires(self):
+        return self.data.get_first_announcement_expires()

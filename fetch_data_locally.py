@@ -68,6 +68,10 @@ async def main():
         tran_announcements = await bart_api.async_get_transformed_announcements()
         print("Transformed announcements incoming")
         pprint.pprint(tran_announcements)
+        has_current_announcements = tran_announcements.has_current_announcements()
+        print(
+            f"For announcements has_current_announcements: {has_current_announcements}"
+        )
 
 
 if __name__ == "__main__":

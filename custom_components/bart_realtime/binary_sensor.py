@@ -11,6 +11,10 @@ async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devi
     """Setup binary_sensor platform."""
     trains_coordinator = entry.runtime_data.trains_coordinator
     async_add_devices([BartRealtimeAPIConnectedBinarySensor(trains_coordinator, entry)])
+    announcements_coordinator = entry.runtime_data.announcements_coordinator
+    async_add_devices(
+        [BartRealtimeAPIConnectedBinarySensor(announcements_coordinator, entry)]
+    )
 
 
 class BartRealtimeAPIConnectedBinarySensor(BartRealtimeEntity, BinarySensorEntity):

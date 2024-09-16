@@ -18,7 +18,10 @@ from homeassistant.helpers.reload import async_setup_reload_service
 
 from .api import BartRealtimeApiClient
 from .const import CONF_API_KEY, CONF_STATION, DOMAIN, PLATFORMS
-from .coordinator import BartRealtimeTrainsDataUpdateCoordinator
+from .coordinator import (
+    BartRealtimeAnnouncementsDataUpdateCoordinator,
+    BartRealtimeTrainsDataUpdateCoordinator,
+)
 
 SCAN_INTERVAL = timedelta(seconds=30)
 
@@ -33,6 +36,7 @@ class BartUpdateCoordinators(NamedTuple):
     """Bart update coordinators stored in the Home Assistant runtime_data object."""
 
     trains_coordinator: BartRealtimeTrainsDataUpdateCoordinator
+    announcements_coordinator: BartRealtimeAnnouncementsDataUpdateCoordinator
 
 
 @dataclass
@@ -67,7 +71,13 @@ class BartRealtimeData:
         )
 
         trains_coordinator = BartRealtimeTrainsDataUpdateCoordinator(hass, client)
-        coordinators = BartUpdateCoordinators(trains_coordinator=trains_coordinator)
+        announcements_coordinator = BartRealtimeAnnouncementsDataUpdateCoordinator(
+            hass, client
+        )
+        coordinators = BartUpdateCoordinators(
+            trains_coordinator=trains_coordinator,
+            announcements_coordinator=announcements_coordinator,
+        )
 
         return cls(
             entry_config_data=entry_config_data,
@@ -78,6 +88,10 @@ class BartRealtimeData:
     @property
     def trains_coordinator(self):
         return self.coordinators.trains_coordinator
+
+    @property
+    def announcements_coordinator(self):
+        return self.coordinators.announcements_coordinator
 
 
 async def async_setup(hass: HomeAssistant, config: Config):
@@ -102,13 +116,19 @@ async def async_setup_entry(
 
     await async_setup_reload_service(hass, DOMAIN, PLATFORMS)
 
+    async def _set_up_coordinator(coordinator):
+        await coordinator.async_refresh()
+
+        if not coordinator.last_update_success:
+            raise ConfigEntryNotReady
+
+        coordinator.set_platforms(PLATFORMS)
+
     trains_coordinator = data.trains_coordinator
-    await trains_coordinator.async_refresh()
+    await _set_up_coordinator(trains_coordinator)
 
-    if not trains_coordinator.last_update_success:
-        raise ConfigEntryNotReady
-
-    trains_coordinator.set_platforms(PLATFORMS)
+    announcements_coordinator = data.announcements_coordinator
+    await _set_up_coordinator(announcements_coordinator)
 
     # Set up all platforms for this device/entry.
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
