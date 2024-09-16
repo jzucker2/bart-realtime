@@ -5,7 +5,6 @@ For more details about this integration, please refer to
 https://github.com/jzucker2/bart-realtime
 """
 
-import asyncio
 from dataclasses import dataclass
 from datetime import timedelta
 import logging
@@ -17,7 +16,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import BartRealtimeApiClient
-from .const import CONF_API_KEY, CONF_STATION, DOMAIN, PLATFORMS, STARTUP_MESSAGE
+from .const import CONF_API_KEY, CONF_STATION, PLATFORMS, STARTUP_MESSAGE
 from .coordinator import BartRealtimeDataUpdateCoordinator
 
 SCAN_INTERVAL = timedelta(seconds=30)
@@ -57,6 +56,10 @@ class BartRealtimeData:
         self.coordinators = BartUpdateCoordinators(
             train_update_coordinator=trains_update_coordinator,
         )
+
+    @property
+    def trains_coordinator(self):
+        return self.coordinators.trains_coordinator
 
 
 async def async_setup(hass: HomeAssistant, config: Config):
@@ -100,20 +103,12 @@ async def async_unload_entry(
     entry: BartRealtimeConfigEntry,
 ) -> bool:
     """Handle removal of an entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    unloaded = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, platform)
-                for platform in PLATFORMS
-                if platform in coordinator.platforms
-            ]
+    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
+        _LOGGER.debug(
+            "Unloading platforms entry: %s with unload_ok: %s", entry, unload_ok
         )
-    )
-    if unloaded:
-        hass.data[DOMAIN].pop(entry.entry_id)
 
-    return unloaded
+    return unload_ok
 
 
 async def async_reload_entry(
