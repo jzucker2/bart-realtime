@@ -9,7 +9,10 @@ from homeassistant.components.sensor import SensorEntity
 from . import BartRealtimeConfigEntry
 from .bart_trains import BartTrainLines
 from .const import ICON, MISSING_VALUE
-from .coordinator import BartRealtimeTrainsDataUpdateCoordinator
+from .coordinator import (
+    BartRealtimeAnnouncementsDataUpdateCoordinator,
+    BartRealtimeTrainsDataUpdateCoordinator,
+)
 from .entity import BartRealtimeEntity
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
@@ -19,6 +22,13 @@ ATTR_COLOR = "color"
 ATTR_DELAY = "delay"
 ATTR_HEXCOLOR = "hexcolor"
 ATTR_ALL_ESTIMATES = "all_estimates"
+ATTR_ANNOUNCEMENT_ID = "announcement_id"
+ATTR_ANNOUNCEMENT_TYPE = "announcement_type"
+ATTR_ANNOUNCEMENT_DESCRIPTION = "announcement_description"
+ATTR_SMS_TEXT = "sms_text"
+ATTR_STATION = "station"
+ATTR_POSTED = "posted"
+ATTR_EXPIRES = "expires"
 
 
 async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devices):
@@ -30,6 +40,11 @@ async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devi
             BartRealtimeTrainSensor(trains_coordinator, entry, s.friendly_name)
             for s in BartTrainLines.get_all_train_lines()
         ]
+    )
+    announcements_coordinator = entry.runtime_data.announcements_coordinator
+    async_add_devices([BartRealtimeLastUpdatedSensor(announcements_coordinator, entry)])
+    async_add_devices(
+        [BartRealtimeAnnouncementSensor(announcements_coordinator, entry)]
     )
 
 
@@ -125,7 +140,7 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
             return self.coordinator.get_display_time_string(self.train_name)
         except Exception as unexp:
             _LOGGER.error(
-                "Setting text sensor state missing for self.train_name: %s with unexp: %s",
+                "Setting sensor state missing for self.train_name: %s with unexp: %s",
                 self.train_name,
                 unexp,
             )
@@ -143,6 +158,95 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
             ATTR_COLOR: self.color,
             ATTR_HEXCOLOR: self.hexcolor,
             ATTR_ALL_ESTIMATES: self.all_estimates,
+        }
+        return dict(final_dict)
+
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+        """Return the state attributes of the sensor."""
+        return self._get_extra_state_attributes()
+
+
+class BartRealtimeAnnouncementSensor(BartRealtimeEntity, SensorEntity):
+    """bart_realtime announcement class."""
+
+    def __init__(
+        self, coordinator: BartRealtimeAnnouncementsDataUpdateCoordinator, config_entry
+    ):
+        super().__init__(coordinator, config_entry)
+
+    @property
+    def announcement_base_name(self):
+        return "Announcement"
+
+    @property
+    def name(self):
+        """Return the name of the text."""
+        return self.announcement_base_name
+
+    @property
+    def unique_id_suffix(self):
+        return f"{self.announcement_base_name}"
+
+    @property
+    def announcement_id(self):
+        return self.coordinator.get_first_announcement_id()
+
+    @property
+    def announcement_type(self):
+        return self.coordinator.get_first_announcement_type()
+
+    @property
+    def station(self):
+        return self.coordinator.get_first_announcement_station()
+
+    @property
+    def announcement_description(self):
+        return self.coordinator.get_first_announcement_description()
+
+    @property
+    def sms_text(self):
+        return self.coordinator.get_first_announcement_sms_text()
+
+    @property
+    def posted(self):
+        return self.coordinator.get_first_announcement_posted()
+
+    @property
+    def expires(self):
+        return self.coordinator.get_first_announcement_expires()
+
+    @property
+    def available(self) -> bool:
+        return self.coordinator.has_current_announcements()
+
+    @property
+    def friendly_display_value(self):
+        """Return value of the text if data exists."""
+        try:
+            return self.announcement_description
+        except Exception as unexp:
+            _LOGGER.error(
+                "Setting sensor state missing for self: %s with unexp: %s",
+                self.train_name,
+                unexp,
+            )
+            return MISSING_VALUE
+
+    @property
+    def state(self):
+        """Return value of the text if data exists."""
+        return self.friendly_display_value
+
+    def _get_extra_state_attributes(self) -> Mapping[str, Any] | None:
+        final_dict = {
+            ATTR_STATION: self.station,
+            ATTR_ANNOUNCEMENT_ID: self.announcement_id,
+            ATTR_ANNOUNCEMENT_TYPE: self.announcement_type,
+            ATTR_ANNOUNCEMENT_DESCRIPTION: self.announcement_description,
+            ATTR_SMS_TEXT: self.sms_text,
+            ATTR_POSTED: self.posted,
+            ATTR_EXPIRES: self.expires,
         }
         return dict(final_dict)
 

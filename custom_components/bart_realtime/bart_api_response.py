@@ -229,3 +229,38 @@ class BartBSARootResponse:
             message=root_message,
             announcements=final_announcements,
         )
+
+    def has_current_announcements(self):
+        return bool(self.announcements and len(self.announcements) > 0)
+
+    def get_first_announcement(self):
+        return self.announcements[0]
+
+    def get_first_announcement_id(self):
+        return self.get_first_announcement().id
+
+    def get_first_announcement_type(self):
+        return self.get_first_announcement().type
+
+    def get_first_announcement_station(self):
+        return self.get_first_announcement().station
+
+    def get_first_announcement_description(self):
+        return self.get_first_announcement().description
+
+    def get_first_announcement_sms_text(self):
+        return self.get_first_announcement().sms_text
+
+    def get_first_announcement_posted(self):
+        return self.get_first_announcement().posted
+
+    def get_first_announcement_expires(self):
+        return self.get_first_announcement().expires
+
+    @property
+    def is_connected(self):
+        if not self.response_date:
+            return False
+        if not self.response_time:
+            return False
+        return True
