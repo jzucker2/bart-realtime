@@ -231,7 +231,20 @@ class BartBSARootResponse:
         )
 
     def has_current_announcements(self):
-        return bool(self.announcements and len(self.announcements) > 0)
+        announcements = self.announcements
+        _LOGGER.debug("Checking has current announcements: %s", announcements)
+        if not announcements:
+            return False
+        if not len(announcements):
+            return False
+        first_announcement = announcements[0]
+        if (
+            first_announcement.id is None
+            and first_announcement.posted is None
+            and first_announcement.expires is None
+        ):
+            return False
+        return True
 
     def get_first_announcement(self):
         return self.announcements[0]
