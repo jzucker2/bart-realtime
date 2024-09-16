@@ -14,9 +14,10 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.reload import async_setup_reload_service
 
 from .api import BartRealtimeApiClient
-from .const import CONF_API_KEY, CONF_STATION, PLATFORMS
+from .const import CONF_API_KEY, CONF_STATION, DOMAIN, PLATFORMS
 from .coordinator import BartRealtimeTrainsDataUpdateCoordinator
 
 SCAN_INTERVAL = timedelta(seconds=30)
@@ -98,6 +99,8 @@ async def async_setup_entry(
 
     # Assign the runtime_data
     entry.runtime_data = data
+
+    await async_setup_reload_service(hass, DOMAIN, PLATFORMS)
 
     trains_coordinator = data.trains_coordinator
     await trains_coordinator.async_refresh()
