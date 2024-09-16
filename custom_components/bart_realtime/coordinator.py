@@ -112,6 +112,12 @@ class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordina
                 return found_minutes
             return f"{found_minutes} minutes"
 
+    def get_current_all_estimates(self, train_name):
+        try:
+            return self.data.get_current_train_all_estimates(train_name)
+        except AttributeError:
+            return list(MISSING_VALUE)
+
     def get_current_direction(self, train_name):
         try:
             return self.data.get_current_train_direction(train_name)

@@ -17,6 +17,7 @@ ATTR_DIRECTION = "direction"
 ATTR_COLOR = "color"
 ATTR_DELAY = "delay"
 ATTR_HEXCOLOR = "hexcolor"
+ATTR_ALL_ESTIMATES = "all_estimates"
 
 
 async def async_setup_entry(hass, entry: BartRealtimeConfigEntry, async_add_devices):
@@ -107,6 +108,10 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
         return self.coordinator.get_current_hexcolor(self.train_name)
 
     @property
+    def all_estimates(self):
+        return self.coordinator.get_current_all_estimates(self.train_name)
+
+    @property
     def available(self) -> bool:
         return self.coordinator.has_current_train_data(self.train_name)
 
@@ -134,6 +139,7 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
             ATTR_DELAY: self.delay,
             ATTR_COLOR: self.color,
             ATTR_HEXCOLOR: self.hexcolor,
+            ATTR_ALL_ESTIMATES: self.all_estimates,
         }
         return dict(final_dict)
 
