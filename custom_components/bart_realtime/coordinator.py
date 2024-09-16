@@ -18,7 +18,7 @@ class BartRealtimeDataUnavailable(Exception):
     pass
 
 
-class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
+class BartRealtimeBaseDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
     def __init__(
@@ -34,6 +34,23 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
 
     def set_platforms(self, configured_platforms):
         self.platforms = configured_platforms
+
+    def get_is_connected(self):
+        try:
+            return self.data.is_connected
+        except AttributeError:
+            return False
+
+    # TODO: make this actually better
+    def get_sensor_state(self):
+        try:
+            return self.data.response_time
+        except AttributeError:
+            return MISSING_VALUE
+
+
+class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordinator):
+    """Class to manage fetching train estimates data from the API."""
 
     @property
     def bart_station(self):
@@ -71,16 +88,3 @@ class BartRealtimeDataUpdateCoordinator(DataUpdateCoordinator):
             return self.data.get_current_train_direction(train_name)
         except AttributeError:
             return MISSING_VALUE
-
-    # TODO: make this actually better
-    def get_sensor_state(self):
-        try:
-            return self.data.response_time
-        except AttributeError:
-            return MISSING_VALUE
-
-    def get_is_connected(self):
-        try:
-            return self.data.is_connected
-        except AttributeError:
-            return False

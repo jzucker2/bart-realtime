@@ -17,7 +17,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import BartRealtimeApiClient
 from .const import CONF_API_KEY, CONF_STATION, PLATFORMS
-from .coordinator import BartRealtimeDataUpdateCoordinator
+from .coordinator import BartRealtimeTrainsDataUpdateCoordinator
 
 SCAN_INTERVAL = timedelta(seconds=30)
 
@@ -31,7 +31,7 @@ type BartRealtimeConfigEntry = ConfigEntry[BartRealtimeData]
 class BartUpdateCoordinators(NamedTuple):
     """Bart update coordinators stored in the Home Assistant runtime_data object."""
 
-    trains_coordinator: BartRealtimeDataUpdateCoordinator
+    trains_coordinator: BartRealtimeTrainsDataUpdateCoordinator
 
 
 @dataclass
@@ -65,7 +65,7 @@ class BartRealtimeData:
             entry_config_data.api_key, entry_config_data.station, session
         )
 
-        trains_coordinator = BartRealtimeDataUpdateCoordinator(hass, client)
+        trains_coordinator = BartRealtimeTrainsDataUpdateCoordinator(hass, client)
         coordinators = BartUpdateCoordinators(trains_coordinator=trains_coordinator)
 
         return cls(
