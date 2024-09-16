@@ -116,21 +116,19 @@ async def async_setup_entry(
 
     await async_setup_reload_service(hass, DOMAIN, PLATFORMS)
 
+    async def _set_up_coordinator(coordinator):
+        await coordinator.async_refresh()
+
+        if not coordinator.last_update_success:
+            raise ConfigEntryNotReady
+
+        coordinator.set_platforms(PLATFORMS)
+
     trains_coordinator = data.trains_coordinator
-    await trains_coordinator.async_refresh()
-
-    if not trains_coordinator.last_update_success:
-        raise ConfigEntryNotReady
-
-    trains_coordinator.set_platforms(PLATFORMS)
+    await _set_up_coordinator(trains_coordinator)
 
     announcements_coordinator = data.announcements_coordinator
-    await announcements_coordinator.async_refresh()
-
-    if not announcements_coordinator.last_update_success:
-        raise ConfigEntryNotReady
-
-    announcements_coordinator.set_platforms(PLATFORMS)
+    await _set_up_coordinator(announcements_coordinator)
 
     # Set up all platforms for this device/entry.
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
