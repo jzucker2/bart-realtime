@@ -14,7 +14,11 @@ SCAN_INTERVAL = timedelta(seconds=30)
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
-class BartRealtimeDataUnavailable(Exception):
+class BartRealtimeBaseDataUpdateCoordinatorException(Exception):
+    pass
+
+
+class BartRealtimeDataUnavailable(BartRealtimeBaseDataUpdateCoordinatorException):
     pass
 
 
@@ -35,6 +39,10 @@ class BartRealtimeBaseDataUpdateCoordinator(DataUpdateCoordinator):
     def set_platforms(self, configured_platforms):
         self.platforms = configured_platforms
 
+    @property
+    def coordinator_type(self):
+        raise BartRealtimeBaseDataUpdateCoordinatorException("not specified!")
+
     def get_is_connected(self):
         try:
             return self.data.is_connected
@@ -48,9 +56,20 @@ class BartRealtimeBaseDataUpdateCoordinator(DataUpdateCoordinator):
         except AttributeError:
             return MISSING_VALUE
 
+    # TODO: make this actually better
+    def get_sensor_last_updated_time(self):
+        try:
+            return self.data.response_time
+        except AttributeError:
+            return MISSING_VALUE
+
 
 class BartRealtimeTrainsDataUpdateCoordinator(BartRealtimeBaseDataUpdateCoordinator):
     """Class to manage fetching train estimates data from the API."""
+
+    @property
+    def coordinator_type(self):
+        return "Trains"
 
     @property
     def bart_station(self):
