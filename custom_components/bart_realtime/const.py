@@ -3,7 +3,6 @@
 # Base component constants
 NAME = "Bart Realtime"
 DOMAIN = "bart_realtime"
-DOMAIN_DATA = f"{DOMAIN}_data"
 VERSION = "1.0.2"
 
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
