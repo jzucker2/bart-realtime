@@ -9,9 +9,6 @@ VERSION = "1.0.2"
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 ISSUE_URL = "https://github.com/jzucker2/bart-realtime/issues"
 
-# Icons
-ICON = "mdi:format-quote-close"
-
 # Platforms
 BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
