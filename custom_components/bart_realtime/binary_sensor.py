@@ -40,11 +40,6 @@ class BartRealtimeAPIConnectedBinarySensor(BartRealtimeEntity, BinarySensorEntit
         return "api_connected"
 
     @property
-    def icon(self) -> str | None:
-        """Icon of the entity."""
-        return "mdi:timer-refresh"
-
-    @property
     def is_on(self):
         """Return true if the binary_sensor is on."""
         return self.coordinator.get_is_connected()

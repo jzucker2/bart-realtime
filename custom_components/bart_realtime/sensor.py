@@ -9,7 +9,7 @@ from homeassistant.const import EntityCategory
 
 from . import BartRealtimeConfigEntry
 from .bart_trains import BartTrainLines
-from .const import ICON, MISSING_VALUE
+from .const import MISSING_VALUE
 from .coordinator import (
     BartRealtimeAnnouncementsDataUpdateCoordinator,
     BartRealtimeTrainsDataUpdateCoordinator,
@@ -69,9 +69,9 @@ class BartRealtimeLastUpdatedSensor(BartRealtimeEntity):
         return self.coordinator.get_sensor_last_updated_time()
 
     @property
-    def icon(self):
-        """Return the icon of the sensor."""
-        return ICON
+    def icon(self) -> str | None:
+        """Icon of the sensor."""
+        return "mdi:timer-refresh"
 
     @property
     def device_class(self):
@@ -138,7 +138,7 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
 
     @property
     def icon(self) -> str | None:
-        """Icon of the entity."""
+        """Icon of the sensor."""
         return "mdi:train"
 
     @property
@@ -230,7 +230,7 @@ class BartRealtimeAnnouncementSensor(BartRealtimeEntity, SensorEntity):
 
     @property
     def icon(self) -> str | None:
-        """Icon of the entity."""
+        """Icon of the sensor."""
         return "mdi:message-alert"
 
     @property
