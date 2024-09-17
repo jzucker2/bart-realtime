@@ -137,6 +137,11 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
         return self.coordinator.has_current_train_data(self.train_name)
 
     @property
+    def icon(self) -> str | None:
+        """Icon of the entity."""
+        return "mdi:train"
+
+    @property
     def friendly_display_value(self):
         """Return value of the text if data exists."""
         try:
@@ -222,6 +227,11 @@ class BartRealtimeAnnouncementSensor(BartRealtimeEntity, SensorEntity):
     @property
     def available(self) -> bool:
         return self.coordinator.has_current_announcements()
+
+    @property
+    def icon(self) -> str | None:
+        """Icon of the entity."""
+        return "mdi:message-alert"
 
     @property
     def friendly_display_value(self):
