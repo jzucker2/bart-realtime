@@ -41,7 +41,7 @@ class BartRealtimeAPIConnectedBinarySensor(BartRealtimeEntity, BinarySensorEntit
 
     @property
     def icon(self) -> str | None:
-        """Icon of the entity, based on time."""
+        """Icon of the entity."""
         return "mdi:timer-refresh"
 
     @property

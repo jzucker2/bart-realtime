@@ -138,7 +138,7 @@ class BartRealtimeTrainSensor(BartRealtimeEntity, SensorEntity):
 
     @property
     def icon(self) -> str | None:
-        """Icon of the entity, based on time."""
+        """Icon of the entity."""
         return "mdi:train"
 
     @property
@@ -230,7 +230,7 @@ class BartRealtimeAnnouncementSensor(BartRealtimeEntity, SensorEntity):
 
     @property
     def icon(self) -> str | None:
-        """Icon of the entity, based on time."""
+        """Icon of the entity."""
         return "mdi:message-alert"
 
     @property
