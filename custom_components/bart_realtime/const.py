@@ -3,7 +3,7 @@
 # Base component constants
 NAME = "Bart Realtime"
 DOMAIN = "bart_realtime"
-VERSION = "1.0.4"
+VERSION = "1.1.0"
 
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 ISSUE_URL = "https://github.com/jzucker2/bart-realtime/issues"
