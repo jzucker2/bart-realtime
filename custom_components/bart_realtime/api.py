@@ -24,9 +24,8 @@ class BartRealtimeApiClient:
         self._api_key = api_key
         self._station = station
         self._session = session
-        # TODO: start supplying or allowing an api_key
-        self._base_url = self.build_base_url(station)
-        self._announcement_base_url = self.build_base_announcement_url()
+        self._base_url = self.build_base_url(station, api_key=api_key)
+        self._announcement_base_url = self.build_base_announcement_url(api_key=api_key)
 
     @classmethod
     def build_base_url(cls, station_abbr, api_key=DEFAULT_API_KEY):
