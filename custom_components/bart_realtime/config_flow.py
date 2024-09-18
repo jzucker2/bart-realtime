@@ -6,12 +6,32 @@ from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+from homeassistant.helpers.selector import (
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+)
 import voluptuous as vol
 
 from .api import BartRealtimeApiClient
 from .const import CONF_API_KEY, CONF_STATION, DEFAULT_API_KEY, DOMAIN, PLATFORMS
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
+
+
+def get_station_options_list():
+    return list(
+        [
+            "16TH",
+            "24TH",
+            "CIVC",
+            "EMBR",
+            "MONT",
+            "POWL",
+            "RICH",
+        ]
+    )
+
 
 # This is the schema that used to display the UI to the user. This simple
 # schema has a single required host field, but it could include a number of fields
@@ -26,7 +46,14 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 # figure this out or look further into it.
 DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_STATION): cv.string,
+        vol.Required(CONF_STATION): SelectSelector(
+            SelectSelectorConfig(
+                options=get_station_options_list(),
+                mode=SelectSelectorMode.DROPDOWN,
+                multiple=False,
+                sort=False,
+            )
+        ),
         vol.Optional(CONF_API_KEY, default=DEFAULT_API_KEY): cv.string,
     }
 )
