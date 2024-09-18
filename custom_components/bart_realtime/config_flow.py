@@ -6,6 +6,11 @@ from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+from homeassistant.helpers.selector import (
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+)
 import voluptuous as vol
 
 from .api import BartRealtimeApiClient
@@ -26,7 +31,14 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 # figure this out or look further into it.
 DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_STATION): cv.string,
+        vol.Required(CONF_STATION): SelectSelector(
+            SelectSelectorConfig(
+                options=list(["16TH", "24TH", "RICH"]),
+                mode=SelectSelectorMode.DROPDOWN,
+                multiple=False,
+                sort=True,
+            )
+        ),
         vol.Optional(CONF_API_KEY, default=DEFAULT_API_KEY): cv.string,
     }
 )
