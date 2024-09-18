@@ -18,6 +18,21 @@ from .const import CONF_API_KEY, CONF_STATION, DEFAULT_API_KEY, DOMAIN, PLATFORM
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
+
+def get_station_options_list():
+    return list(
+        [
+            "16TH",
+            "24TH",
+            "CIVC",
+            "EMBR",
+            "MONT",
+            "POWL",
+            "RICH",
+        ]
+    )
+
+
 # This is the schema that used to display the UI to the user. This simple
 # schema has a single required host field, but it could include a number of fields
 # such as username, password etc. See other components in the HA core code for
@@ -33,10 +48,10 @@ DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_STATION): SelectSelector(
             SelectSelectorConfig(
-                options=list(["16TH", "24TH", "RICH"]),
+                options=get_station_options_list(),
                 mode=SelectSelectorMode.DROPDOWN,
                 multiple=False,
-                sort=True,
+                sort=False,
             )
         ),
         vol.Optional(CONF_API_KEY, default=DEFAULT_API_KEY): cv.string,
