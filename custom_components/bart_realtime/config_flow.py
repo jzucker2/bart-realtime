@@ -4,11 +4,12 @@ import logging
 
 from homeassistant import config_entries
 from homeassistant.core import callback
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 import voluptuous as vol
 
 from .api import BartRealtimeApiClient
-from .const import CONF_API_KEY, CONF_STATION, DOMAIN, PLATFORMS
+from .const import CONF_API_KEY, CONF_STATION, DEFAULT_API_KEY, DOMAIN, PLATFORMS
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
@@ -25,8 +26,8 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 # figure this out or look further into it.
 DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_API_KEY): str,
-        vol.Required(CONF_STATION): str,
+        vol.Required(CONF_STATION): cv.string,
+        vol.Optional(CONF_API_KEY, default=DEFAULT_API_KEY): cv.string,
     }
 )
 
@@ -35,7 +36,6 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for bart_realtime."""
 
     VERSION = 1
-    CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
     def __init__(self):
         """Initialize."""

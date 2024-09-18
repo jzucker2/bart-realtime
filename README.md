@@ -126,3 +126,65 @@ python local_data_fetcher.py
   - Advisory endpoint (maybe a text sensor for this as well, with its own data update coordinator)
 - https://api.bart.gov/docs/stn/stns.aspx
   - All stations (could use this for testing config flow better)
+
+## UI Prototype Cards
+
+For trains going north:
+
+```yaml
+type: entity-filter
+state_filter:
+  - operator: "=="
+    value: North
+    attribute: direction
+entities:
+  - sensor.24th_street
+  - sensor.antioch
+  - sensor.berryessa
+  - sensor.daly_city
+  - sensor.dublin_pleasanton
+  - sensor.fremont
+  - sensor.millbrae
+  - sensor.pittsburg_bay_point
+  - sensor.richmond
+  - sensor.sf_airport
+  - sensor.sfo_millbrae
+card:
+  title: North
+```
+
+For trains going south:
+
+```yaml
+type: entity-filter
+state_filter:
+  - operator: "=="
+    value: South
+    attribute: direction
+entities:
+  - sensor.24th_street
+  - sensor.antioch
+  - sensor.berryessa
+  - sensor.daly_city
+  - sensor.dublin_pleasanton
+  - sensor.fremont
+  - sensor.millbrae
+  - sensor.pittsburg_bay_point
+  - sensor.richmond
+  - sensor.sf_airport
+  - sensor.sfo_millbrae
+card:
+  title: South
+```
+
+For announcements:
+
+```yaml
+type: entities
+entities:
+  - entity: binary_sensor.bart_has_announcements
+  - entity: sensor.announcement
+title: Announcements
+show_header_toggle: false
+state_color: true
+```
