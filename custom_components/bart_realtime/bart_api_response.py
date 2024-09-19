@@ -308,7 +308,6 @@ class BartStation:
 
 @dataclass(frozen=True, kw_only=True)
 class BartStationsRootResponse:
-    # TODO: need to turn into a datetime object
     message: Optional[str] = None
     stations: list = None
 
