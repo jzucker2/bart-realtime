@@ -7,7 +7,11 @@ import socket
 import aiohttp
 import async_timeout
 
-from .bart_api_response import BartBSARootResponse, BartETDRootResponse
+from .bart_api_response import (
+    BartBSARootResponse,
+    BartETDRootResponse,
+    BartStationsRootResponse,
+)
 from .const import DEFAULT_API_KEY
 
 TIMEOUT = 10
@@ -26,6 +30,7 @@ class BartRealtimeApiClient:
         self._session = session
         self._base_url = self.build_base_url(station, api_key=api_key)
         self._announcement_base_url = self.build_base_announcement_url(api_key=api_key)
+        self._station_base_url = self.build_base_stations_url(api_key=api_key)
 
     @classmethod
     def build_base_url(cls, station_abbr, api_key=DEFAULT_API_KEY):
@@ -39,6 +44,12 @@ class BartRealtimeApiClient:
         _LOGGER.debug("bart api client building announcement base_url: %s", a_base_url)
         return a_base_url
 
+    @classmethod
+    def build_base_stations_url(cls, api_key=DEFAULT_API_KEY):
+        s_base_url = f"https://api.bart.gov/api/stn.aspx?cmd=stns&key={api_key}&json=y"
+        _LOGGER.debug("bart api client building stations base_url: %s", s_base_url)
+        return s_base_url
+
     @property
     def base_url(self):
         return self._base_url
@@ -46,6 +57,10 @@ class BartRealtimeApiClient:
     @property
     def announcement_base_url(self):
         return self._announcement_base_url
+
+    @property
+    def station_base_url(self):
+        return self._station_base_url
 
     @property
     def api_key(self):
@@ -106,6 +121,28 @@ class BartRealtimeApiClient:
             json_announcements,
         )
         return self.transform_announcements(json_announcements)
+
+    async def async_get_json_stations(self) -> dict:
+        """Get data from the API."""
+        return await self.api_wrapper("get", self.station_base_url)
+
+    @classmethod
+    def transform_stations(cls, input_data) -> BartStationsRootResponse:
+        _LOGGER.debug("Transform stations input_data: %s", input_data)
+
+        bart_response = BartStationsRootResponse.from_response(input_data)
+
+        _LOGGER.debug("Transform stations bart_response: %s", bart_response)
+        return bart_response
+
+    async def async_get_transformed_stations(self) -> BartStationsRootResponse:
+        """Get data from the API."""
+        json_stations = await self.async_get_json_stations()
+        _LOGGER.debug(
+            "Data fetched for transform async json_stations: %s",
+            json_stations,
+        )
+        return self.transform_stations(json_stations)
 
     async def api_wrapper(
         self, method: str, url: str, data: dict = {}, headers: dict = {}

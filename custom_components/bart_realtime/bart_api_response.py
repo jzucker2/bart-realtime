@@ -277,3 +277,64 @@ class BartBSARootResponse:
         if not self.response_time:
             return False
         return True
+
+
+@dataclass(frozen=True, kw_only=True)
+class BartStation:
+    name: str
+    abbreviation: str
+    gtfs_latitude: str
+    gtfs_longitude: str
+    address: str
+    city: str
+    county: str
+    state: str
+    zipcode: str
+
+    @classmethod
+    def from_response(cls, input_data):
+        return cls(
+            name=input_data["name"],
+            abbreviation=input_data["abbr"],
+            gtfs_latitude=input_data["gtfs_latitude"],
+            gtfs_longitude=input_data["gtfs_longitude"],
+            address=input_data["address"],
+            city=input_data["city"],
+            county=input_data["county"],
+            state=input_data["state"],
+            zipcode=input_data["zipcode"],
+        )
+
+
+@dataclass(frozen=True, kw_only=True)
+class BartStationsRootResponse:
+    # TODO: need to turn into a datetime object
+    message: Optional[str] = None
+    stations: list = None
+
+    @classmethod
+    def from_response(cls, input_data):
+        final_stations = []
+
+        root_data = input_data["root"]
+        if not root_data:
+            # TODO: make sure I properly handle this exception
+            raise BartRootResponseException("no root data")
+
+        root_message = root_data["message"]
+
+        stations_root = root_data["stations"]
+        actual_stations = stations_root["station"]
+
+        for station in actual_stations:
+            _LOGGER.debug("Build response station: %s", station)
+            station_response = BartStation.from_response(station)
+            final_stations.append(station_response)
+
+        return cls(
+            message=root_message,
+            stations=final_stations,
+        )
+
+    def get_stations_options_list(self):
+        return list([s.abbreviation for s in self.stations])
