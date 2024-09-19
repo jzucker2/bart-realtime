@@ -7,8 +7,9 @@ import aiohttp
 
 from custom_components.bart_realtime.api import BartRealtimeApiClient
 from custom_components.bart_realtime.bart_trains import BartTrainLines
+from custom_components.bart_realtime.const import DEFAULT_API_KEY
 
-API_KEY = "api_key"
+API_KEY = DEFAULT_API_KEY
 STATION = "16TH"
 TEST_TRAIN = "Antioch"
 
@@ -31,7 +32,7 @@ async def main():
     all_train_lines = BartTrainLines.get_all_train_lines()
     print(f"Going with all_train_lines: {all_train_lines}")
     async with aiohttp.ClientSession() as client:
-        bart_api = BartRealtimeApiClient(API_KEY, STATION, client)
+        bart_api = BartRealtimeApiClient(STATION, client, api_key=API_KEY)
         # First validate credentials like in auth flow
         validation_response = await bart_api.async_validate()
         print("First validation response")
@@ -72,6 +73,12 @@ async def main():
         print(
             f"For announcements has_current_announcements: {has_current_announcements}"
         )
+        # Now do transformed stations
+        tran_stations = await bart_api.async_get_transformed_stations()
+        print("Transformed stations incoming")
+        pprint.pprint(tran_stations)
+        stations_options_list = tran_stations.get_stations_options_list()
+        print(f"For stations stations_options_list: {stations_options_list}")
 
 
 if __name__ == "__main__":

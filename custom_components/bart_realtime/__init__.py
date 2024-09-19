@@ -70,7 +70,7 @@ class BartRealtimeData:
         session = async_get_clientsession(hass)
 
         client = BartRealtimeApiClient(
-            entry_config_data.api_key, entry_config_data.station, session
+            entry_config_data.station, session, api_key=entry_config_data.api_key
         )
 
         trains_coordinator = BartRealtimeTrainsDataUpdateCoordinator(hass, client)
