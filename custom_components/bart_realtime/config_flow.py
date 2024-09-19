@@ -20,6 +20,7 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 def get_station_options_list():
+
     return list(
         [
             "16TH",
@@ -109,7 +110,7 @@ class BartRealtimeFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             session = async_create_clientsession(self.hass)
             api_key = user_input[CONF_API_KEY]
             station = user_input[CONF_STATION]
-            client = BartRealtimeApiClient(api_key, station, session)
+            client = BartRealtimeApiClient(station, session, api_key=api_key)
             await client.async_validate()
             return True
         except Exception:  # pylint: disable=broad-except

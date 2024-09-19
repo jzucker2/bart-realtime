@@ -22,7 +22,10 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 class BartRealtimeApiClient:
     def __init__(
-        self, api_key: str, station: str, session: aiohttp.ClientSession
+        self,
+        station: str,
+        session: aiohttp.ClientSession,
+        api_key: str = DEFAULT_API_KEY,
     ) -> None:
         """Sample API Client."""
         self._api_key = api_key
