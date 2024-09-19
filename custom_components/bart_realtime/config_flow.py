@@ -20,7 +20,6 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 def get_station_options_list():
-
     return list(
         [
             "16TH",
