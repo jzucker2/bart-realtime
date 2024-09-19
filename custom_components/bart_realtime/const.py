@@ -27,6 +27,62 @@ MISSING_VALUE = "missing"
 LEAVING_VALUE = "Leaving"
 NO_DELAYS_VALUE = "No delays reported."
 
+# TODO: replace with a dynamic call
+HARDCODED_STATIONS_LIST = list(
+    [
+        "12TH",
+        "16TH",
+        "19TH",
+        "24TH",
+        "ANTC",
+        "ASHB",
+        "BALB",
+        "BAYF",
+        "BERY",
+        "CAST",
+        "CIVC",
+        "COLS",
+        "COLM",
+        "CONC",
+        "DALY",
+        "DBRK",
+        "DUBL",
+        "DELN",
+        "PLZA",
+        "EMBR",
+        "FRMT",
+        "FTVL",
+        "GLEN",
+        "HAYW",
+        "LAFY",
+        "LAKE",
+        "MCAR",
+        "MLBR",
+        "MLPT",
+        "MONT",
+        "NBRK",
+        "NCON",
+        "OAKL",
+        "ORIN",
+        "PITT",
+        "PCTR",
+        "PHIL",
+        "POWL",
+        "RICH",
+        "ROCK",
+        "SBRN",
+        "SFIA",
+        "SANL",
+        "SHAY",
+        "SSAN",
+        "UCTY",
+        "WCRK",
+        "WARM",
+        "WDUB",
+        "WOAK",
+    ]
+)
+
 
 STARTUP_MESSAGE = f"""
 -------------------------------------------------------------------

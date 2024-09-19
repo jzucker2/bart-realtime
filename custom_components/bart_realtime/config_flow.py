@@ -14,23 +14,20 @@ from homeassistant.helpers.selector import (
 import voluptuous as vol
 
 from .api import BartRealtimeApiClient
-from .const import CONF_API_KEY, CONF_STATION, DEFAULT_API_KEY, DOMAIN, PLATFORMS
+from .const import (
+    CONF_API_KEY,
+    CONF_STATION,
+    DEFAULT_API_KEY,
+    DOMAIN,
+    HARDCODED_STATIONS_LIST,
+    PLATFORMS,
+)
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 def get_station_options_list():
-    return list(
-        [
-            "16TH",
-            "24TH",
-            "CIVC",
-            "EMBR",
-            "MONT",
-            "POWL",
-            "RICH",
-        ]
-    )
+    return HARDCODED_STATIONS_LIST
 
 
 # This is the schema that used to display the UI to the user. This simple
