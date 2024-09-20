@@ -119,6 +119,8 @@ python local_data_fetcher.py
 - https://developers.home-assistant.io/blog/2024/08/05/coordinator_async_setup/
 - https://developers.home-assistant.io/blog/2024/05/01/improved-hass-data-typing
 - https://github.com/home-assistant/core/blob/dev/homeassistant/components/airnow/__init__.py#L96
+- https://developers.home-assistant.io/docs/core/entity/#entity-naming
+  - Entity naming (this needs a redo)
 
 ## Bart Dev Info
 
