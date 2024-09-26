@@ -120,7 +120,7 @@ class BartETDRootResponse:
         station_abbreviation = station_data["abbr"]
         station_name = station_data["name"]
 
-        train_lines_data = station_data["etd"]
+        train_lines_data = station_data.get("etd", [])
         for train_line in train_lines_data:
             _LOGGER.debug("Build response train times train_line: %s", train_line)
             train_line_key = train_line["destination"]
