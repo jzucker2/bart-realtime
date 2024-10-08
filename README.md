@@ -110,6 +110,8 @@ python local_data_fetcher.py
 - https://github.com/home-assistant/brands
 - https://github.com/home-assistant/brands/pull/2610
   - Example PR of adding images
+- https://github.com/home-assistant/brands/pull/5948
+  - PR in flight to add images for this to the `brands` repo
 - https://developers.home-assistant.io/docs/config_entries_index/
 - https://github.com/boralyl/github-custom-component-tutorial
 - https://github.com/project-koku/nise-populator/pull/135#issuecomment-2329879613
