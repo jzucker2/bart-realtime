@@ -133,7 +133,7 @@ python local_data_fetcher.py
 
 ## UI Prototype Cards
 
-For trains going north:
+For trains going North:
 
 ```yaml
 type: entity-filter
@@ -157,7 +157,7 @@ card:
   title: North
 ```
 
-For trains going south:
+For trains going South:
 
 ```yaml
 type: entity-filter
