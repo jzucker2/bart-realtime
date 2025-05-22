@@ -18,6 +18,10 @@ from .entity import BartRealtimeEntity
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
+
+MAX_STRING_LENGTH = (
+    250  # hass max sensor length is 255, so 250 leaves padding to be safe
+)
 ATTR_DIRECTION = "direction"
 ATTR_COLOR = "color"
 ATTR_DELAY = "delay"
@@ -237,7 +241,10 @@ class BartRealtimeAnnouncementSensor(BartRealtimeEntity, SensorEntity):
     def friendly_display_value(self):
         """Return value of the text if data exists."""
         try:
-            return self.sms_text
+            current_value = self.sms_text
+            if len(current_value) > MAX_STRING_LENGTH:
+                return current_value[:MAX_STRING_LENGTH] + "..."
+            return current_value
         except Exception as unexp:
             _LOGGER.error(
                 "Setting sensor state missing for self: %s with unexp: %s",
